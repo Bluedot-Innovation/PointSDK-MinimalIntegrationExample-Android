@@ -1,6 +1,7 @@
 package bluedot.com.au.minimalintegration;
 
 import android.app.Application;
+import android.location.Location;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -9,10 +10,12 @@ import com.google.android.gms.security.ProviderInstaller;
 
 import java.util.List;
 
-import au.com.bluedot.point.ApplicationNotification;
+import au.com.bluedot.application.model.Proximity;
+import au.com.bluedot.application.model.geo.Fence;
 import au.com.bluedot.point.ApplicationNotificationListener;
 import au.com.bluedot.point.ServiceStatusListener;
 import au.com.bluedot.point.net.engine.BDError;
+import au.com.bluedot.point.net.engine.BeaconInfo;
 import au.com.bluedot.point.net.engine.ServiceManager;
 import au.com.bluedot.point.net.engine.ZoneInfo;
 
@@ -107,23 +110,51 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and check into any fence under that Zone
-     *
-     * @param applicationNotification
+     * @param fence      - Fence triggered
+     * @param zoneInfo   - Zone information Fence belongs to
+     * @param location   - geographical coordinate where trigger happened
+     * @param isCheckOut - CheckOut will be tracked and delivered once device left the Fence
      */
     @Override
-    public void onCheckIntoFence(ApplicationNotification applicationNotification) {
+    public void onCheckIntoFence(Fence fence, ZoneInfo zoneInfo, Location location, boolean isCheckOut) {
+
+    }
+
+    /**
+     * This callback happens when user is subscribed to Application Notification
+     * and checked out from fence under that Zone
+     * @param fence     - Fence user is checked out from
+     * @param zoneInfo  - Zone information Fence belongs to
+     * @param dwellTime - time spent inside the Fence; in minutes
+     */
+    @Override
+    public void onCheckedOutFromFence(Fence fence, ZoneInfo zoneInfo, int dwellTime) {
 
     }
 
     /**
      * This callback happens when user is subscribed to Application Notification
      * and check into any beacon under that Zone
-     *
-     * @param applicationNotification
+     * @param beaconInfo - Beacon triggered
+     * @param zoneInfo   - Zone information Beacon belongs to
+     * @param location   - geographical coordinate where trigger happened
+     * @param proximity  - the proximity at which the trigger occurred
+     * @param isCheckOut - CheckOut will be tracked and delivered once device left the Beacon advertisement range
      */
     @Override
-    public void onCheckIntoBeacon(ApplicationNotification applicationNotification) {
+    public void onCheckIntoBeacon(BeaconInfo beaconInfo, ZoneInfo zoneInfo, Location location, Proximity proximity, boolean isCheckOut) {
 
     }
 
+    /**
+     * This callback happens when user is subscribed to Application Notification
+     * and checked out from beacon under that Zone
+     * @param beaconInfo - Beacon is checked out from
+     * @param zoneInfo   - Zone information Beacon belongs to
+     * @param dwellTime  - time spent inside the Beacon area; in minutes
+     */
+    @Override
+    public void onCheckedOutFromBeacon(BeaconInfo beaconInfo, ZoneInfo zoneInfo, int dwellTime) {
+
+    }
 }
