@@ -2,11 +2,6 @@ package bluedot.com.au.minimalintegration;
 
 import android.app.Application;
 import android.location.Location;
-import android.widget.Toast;
-
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.security.ProviderInstaller;
 
 import java.util.List;
 
@@ -42,18 +37,6 @@ public class MainApplication extends Application implements ServiceStatusListene
     }
 
     private void initPointSDK() {
-
-
-        try {
-            ProviderInstaller.installIfNeeded(getApplicationContext());
-        } catch (GooglePlayServicesRepairableException e) {
-            Toast.makeText(this, "GooglePlayServicesRepairableException happened while updating Security Provider", Toast.LENGTH_LONG).show();
-            return;
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Toast.makeText(this, "GooglePlayServicesNotAvailableException happened while updating Security Provider", Toast.LENGTH_LONG).show();
-            return;
-        }
-
         mServiceManager = ServiceManager.getInstance(this);
         if(!mServiceManager.isBlueDotPointServiceRunning()){
             mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this,restartMode);
@@ -68,7 +51,7 @@ public class MainApplication extends Application implements ServiceStatusListene
     @Override
     public void onBlueDotPointServiceStartedSuccess() {
         mServiceManager.subscribeForApplicationNotification(this);
-
+        
     }
 
     /**

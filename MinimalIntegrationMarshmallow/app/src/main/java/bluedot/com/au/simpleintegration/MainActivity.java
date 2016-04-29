@@ -1,14 +1,14 @@
 package bluedot.com.au.simpleintegration;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 /**
  * Created by Bluedot Innovation on 20/01/16.
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     Button bFinishActivity;
 

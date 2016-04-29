@@ -6,11 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
-import android.widget.Toast;
-
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.security.ProviderInstaller;
 
 import java.util.List;
 
@@ -47,19 +42,9 @@ public class MainApplication extends Application implements ServiceStatusListene
 
         int checkPermission = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        if(checkPermission == PackageManager.PERMISSION_GRANTED){
-            try {
-                ProviderInstaller.installIfNeeded(getApplicationContext());
-            } catch (GooglePlayServicesRepairableException e) {
-                Toast.makeText(this, "GooglePlayServicesRepairableException happened while updating Security Provider", Toast.LENGTH_LONG).show();
-                return;
-            } catch (GooglePlayServicesNotAvailableException e) {
-                Toast.makeText(this, "GooglePlayServicesNotAvailableException happened while updating Security Provider", Toast.LENGTH_LONG).show();
-                return;
-            }
-
+        if(checkPermission == PackageManager.PERMISSION_GRANTED) {
             mServiceManager = ServiceManager.getInstance(this);
-            if(!mServiceManager.isBlueDotPointServiceRunning()){
+            if(!mServiceManager.isBlueDotPointServiceRunning()) {
                 mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this,restartMode);
             }
         }
