@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by Bluedot Innovation on 20/01/16.
+/*
+ * @author Bluedot Innovation
+ * Copyright (c) 2016 Bluedot Innovation. All rights reserved.
+ * RequestPermissionActivity handles permission requests needed for running Bluedot Point SDK on Marshmallow devices.
  */
 public class RequestPermissionActivity extends AppCompatActivity {
 

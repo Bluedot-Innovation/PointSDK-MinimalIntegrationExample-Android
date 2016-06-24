@@ -21,8 +21,10 @@ import au.com.bluedot.point.net.engine.BeaconInfo;
 import au.com.bluedot.point.net.engine.ServiceManager;
 import au.com.bluedot.point.net.engine.ZoneInfo;
 
-/**
- * Created by Bluedot Innovation on 20/01/16.
+/*
+ * @author Bluedot Innovation
+ * Copyright (c) 2016 Bluedot Innovation. All rights reserved.
+ * MainApplication demonstrates the implementation Bluedot Point SDK and related callbacks.
  */
 public class MainApplication extends Application implements ServiceStatusListener, ApplicationNotificationListener {
 
