@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Map;
 
 import au.com.bluedot.application.model.Proximity;
 import au.com.bluedot.application.model.geo.Fence;
@@ -123,10 +124,11 @@ public class MainApplication extends Application implements ServiceStatusListene
      * @param fence      - Fence triggered
      * @param zoneInfo   - Zone information Fence belongs to
      * @param location   - geographical coordinate where trigger happened
+     * @param customData - custom data associated with this Custom Action
      * @param isCheckOut - CheckOut will be tracked and delivered once device left the Fence
      */
     @Override
-    public void onCheckIntoFence(final Fence fence, ZoneInfo zoneInfo, Location location, boolean isCheckOut) {
+    public void onCheckIntoFence(final Fence fence, ZoneInfo zoneInfo, Location location, Map<String, String> customData, boolean isCheckOut) {
         //Using handler to pass Runnable into UI thread to interact with UI Elements
         handler.post(new Runnable() {
             @Override
@@ -142,9 +144,10 @@ public class MainApplication extends Application implements ServiceStatusListene
      * @param fence     - Fence user is checked out from
      * @param zoneInfo  - Zone information Fence belongs to
      * @param dwellTime - time spent inside the Fence; in minutes
+     * @param customData - custom data associated with this Custom Action
      */
     @Override
-    public void onCheckedOutFromFence(final Fence fence, ZoneInfo zoneInfo, final int dwellTime) {
+    public void onCheckedOutFromFence(final Fence fence, ZoneInfo zoneInfo, final int dwellTime, Map<String, String> customData) {
         //Using handler to pass Runnable into UI thread to interact with UI Elements
         handler.post(new Runnable() {
             @Override
@@ -162,10 +165,11 @@ public class MainApplication extends Application implements ServiceStatusListene
      * @param zoneInfo   - Zone information Beacon belongs to
      * @param location   - geographical coordinate where trigger happened
      * @param proximity  - the proximity at which the trigger occurred
+     * @param customData - custom data associated with this Custom Action
      * @param isCheckOut - CheckOut will be tracked and delivered once device left the Beacon advertisement range
      */
     @Override
-    public void onCheckIntoBeacon(final BeaconInfo beaconInfo, ZoneInfo zoneInfo, Location location, Proximity proximity, boolean isCheckOut) {
+    public void onCheckIntoBeacon(final BeaconInfo beaconInfo, ZoneInfo zoneInfo, Location location, Proximity proximity, Map<String, String> customData, boolean isCheckOut) {
         //Using handler to pass Runnable into UI thread to interact with UI Elements
         handler.post(new Runnable() {
             @Override
@@ -181,9 +185,10 @@ public class MainApplication extends Application implements ServiceStatusListene
      * @param beaconInfo - Beacon is checked out from
      * @param zoneInfo   - Zone information Beacon belongs to
      * @param dwellTime  - time spent inside the Beacon area; in minutes
+     * @param customData - custom data associated with this Custom Action
      */
     @Override
-    public void onCheckedOutFromBeacon(final BeaconInfo beaconInfo, ZoneInfo zoneInfo, final int dwellTime) {
+    public void onCheckedOutFromBeacon(final BeaconInfo beaconInfo, ZoneInfo zoneInfo, final int dwellTime, Map<String, String> customData) {
         //Using handler to pass Runnable into UI thread to interact with UI Elements
         handler.post(new Runnable() {
             @Override

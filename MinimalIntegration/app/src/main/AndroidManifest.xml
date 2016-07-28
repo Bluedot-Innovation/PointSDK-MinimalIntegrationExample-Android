@@ -39,6 +39,10 @@
             android:exported="false">
         </service>
 
+        <service android:name="au.com.bluedot.point.net.engine.DataJobScheduler"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <!-- Required for Beacons integration -->
         <service
             android:name="au.com.bluedot.point.beacon.BlueDotBLEService"
