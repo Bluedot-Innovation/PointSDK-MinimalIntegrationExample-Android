@@ -19,6 +19,7 @@ import au.com.bluedot.point.ApplicationNotificationListener;
 import au.com.bluedot.point.ServiceStatusListener;
 import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.BeaconInfo;
+import au.com.bluedot.point.net.engine.LocationInfo;
 import au.com.bluedot.point.net.engine.ServiceManager;
 import au.com.bluedot.point.net.engine.ZoneInfo;
 
@@ -128,7 +129,7 @@ public class MainApplication extends Application implements ServiceStatusListene
      * @param isCheckOut - CheckOut will be tracked and delivered once device left the Fence
      */
     @Override
-    public void onCheckIntoFence(final Fence fence, ZoneInfo zoneInfo, Location location, Map<String, String> customData, boolean isCheckOut) {
+    public void onCheckIntoFence(final Fence fence, ZoneInfo zoneInfo, LocationInfo location, Map<String, String> customData, boolean isCheckOut) {
         //Using handler to pass Runnable into UI thread to interact with UI Elements
         handler.post(new Runnable() {
             @Override
@@ -169,7 +170,7 @@ public class MainApplication extends Application implements ServiceStatusListene
      * @param isCheckOut - CheckOut will be tracked and delivered once device left the Beacon advertisement range
      */
     @Override
-    public void onCheckIntoBeacon(final BeaconInfo beaconInfo, ZoneInfo zoneInfo, Location location, Proximity proximity, Map<String, String> customData, boolean isCheckOut) {
+    public void onCheckIntoBeacon(final BeaconInfo beaconInfo, ZoneInfo zoneInfo, LocationInfo location, Proximity proximity, Map<String, String> customData, boolean isCheckOut) {
         //Using handler to pass Runnable into UI thread to interact with UI Elements
         handler.post(new Runnable() {
             @Override
