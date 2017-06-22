@@ -1,6 +1,8 @@
 package bluedot.com.au.minimalintegration;
 
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Looper;
@@ -48,6 +50,12 @@ public class MainApplication extends Application implements ServiceStatusListene
 
     private void initPointSDK() {
         mServiceManager = ServiceManager.getInstance(this);
+
+        // Android O handling - Set the foreground Service Notification which will fire only if running on Android O and above
+        Intent actionIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+        mServiceManager.setForegroundServiceNotification(R.mipmap.ic_launcher, getString(R.string.foreground_notification_title), getString(R.string.foreground_notification_text), pendingIntent);
+
         if(!mServiceManager.isBlueDotPointServiceRunning()){
             mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this,restartMode);
         }
