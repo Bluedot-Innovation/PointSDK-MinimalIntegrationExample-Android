@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 import au.com.bluedot.application.model.Proximity;
-import au.com.bluedot.application.model.geo.Fence;
 import au.com.bluedot.point.ApplicationNotificationListener;
 import au.com.bluedot.point.ServiceStatusListener;
 import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.BeaconInfo;
+import au.com.bluedot.point.net.engine.FenceInfo;
 import au.com.bluedot.point.net.engine.LocationInfo;
 import au.com.bluedot.point.net.engine.ServiceManager;
 import au.com.bluedot.point.net.engine.ZoneInfo;
@@ -54,7 +54,7 @@ public class MainApplication extends Application implements ServiceStatusListene
         // Android O handling - Set the foreground Service Notification which will fire only if running on Android O and above
         Intent actionIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT );
-        mServiceManager.setForegroundServiceNotification(R.mipmap.ic_launcher, getString(R.string.foreground_notification_title), getString(R.string.foreground_notification_text), pendingIntent);
+        mServiceManager.setForegroundServiceNotification(R.mipmap.ic_launcher, getString(R.string.foreground_notification_title), getString(R.string.foreground_notification_text), pendingIntent, false);
 
         if(!mServiceManager.isBlueDotPointServiceRunning()){
             mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this,restartMode);
@@ -118,12 +118,12 @@ public class MainApplication extends Application implements ServiceStatusListene
      * @param isCheckOut - CheckOut will be tracked and delivered once device left the Fence
      */
     @Override
-    public void onCheckIntoFence(final Fence fence, ZoneInfo zoneInfo, LocationInfo location, Map<String, String> customData, boolean isCheckOut) {
+    public void onCheckIntoFence(final FenceInfo fenceInfo, ZoneInfo zoneInfo, LocationInfo location, Map<String, String> customData, boolean isCheckOut) {
         //Using handler to pass Runnable into UI thread to interact with UI Elements
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(),"Checked into fence: " + fence.getName(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Checked into fence: " + fenceInfo.getName(),Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -137,12 +137,12 @@ public class MainApplication extends Application implements ServiceStatusListene
      * @param customData - custom data associated with this Custom Action
      */
     @Override
-    public void onCheckedOutFromFence(final Fence fence, ZoneInfo zoneInfo, final int dwellTime, Map<String, String> customData) {
+    public void onCheckedOutFromFence(final FenceInfo fenceInfo, ZoneInfo zoneInfo, final int dwellTime, Map<String, String> customData) {
         //Using handler to pass Runnable into UI thread to interact with UI Elements
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(), "Left: " + fence.getName() + " dwellTime,min=" + dwellTime, Toast.LENGTH_LONG)
+                Toast.makeText(getApplicationContext(), "Left: " + fenceInfo.getName() + " dwellTime,min=" + dwellTime, Toast.LENGTH_LONG)
                         .show();
             }
         });
