@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="bluedot.com.au.minimalintegration" >
-    
-    <!-- General Point SDK functionality -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <!-- Required for Beacons integration -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -28,24 +18,7 @@
             </intent-filter>
         </activity>
 
-
-
-        <!-- General Point SDK functionality -->
-        <service
-            android:name="au.com.bluedot.point.net.engine.BlueDotPointService"
-            android:exported="false">
-        </service>
-
-        <service android:name="au.com.bluedot.point.net.engine.DataJobScheduler"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <!-- Required for Beacons integration -->
-        <service
-            android:name="au.com.bluedot.point.beacon.BlueDotBLEService"
-            android:exported="false">
-        </service>
-
+        <activity android:name=".RequestPermissionActivity" />
 
     </application>
 

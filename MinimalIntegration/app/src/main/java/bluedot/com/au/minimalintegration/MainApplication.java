@@ -1,11 +1,14 @@
 package bluedot.com.au.minimalintegration;
 
+import android.Manifest;
 import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import java.util.List;
@@ -23,7 +26,7 @@ import au.com.bluedot.point.net.engine.ZoneInfo;
 
 /*
  * @author Bluedot Innovation
- * Copyright (c) 2016 Bluedot Innovation. All rights reserved.
+ * Copyright (c) 2018 Bluedot Innovation. All rights reserved.
  * MainApplication demonstrates the implementation Bluedot Point SDK and related callbacks.
  */
 public class MainApplication extends Application implements ServiceStatusListener, ApplicationNotificationListener {
@@ -48,17 +51,35 @@ public class MainApplication extends Application implements ServiceStatusListene
         initPointSDK();
     }
 
-    private void initPointSDK() {
-        mServiceManager = ServiceManager.getInstance(this);
+    public void initPointSDK() {
 
-        // Android O handling - Set the foreground Service Notification which will fire only if running on Android O and above
-        Intent actionIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT );
-        mServiceManager.setForegroundServiceNotification(R.mipmap.ic_launcher, getString(R.string.foreground_notification_title), getString(R.string.foreground_notification_text), pendingIntent, false);
+        int checkPermissionCoarse = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        int checkPermissionFine = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
 
-        if(!mServiceManager.isBlueDotPointServiceRunning()){
-            mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this,restartMode);
+        if(checkPermissionCoarse == PackageManager.PERMISSION_GRANTED && checkPermissionFine == PackageManager.PERMISSION_GRANTED) {
+            mServiceManager = ServiceManager.getInstance(this);
+
+            // Android O handling - Set the foreground Service Notification which will fire only if running on Android O and above
+            Intent actionIntent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT );
+            mServiceManager.setForegroundServiceNotification(R.mipmap.ic_launcher, getString(R.string.foreground_notification_title), getString(R.string.foreground_notification_text), pendingIntent, false);
+
+            if(!mServiceManager.isBlueDotPointServiceRunning()) {
+                mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this,restartMode);
+            }
         }
+        else
+        {
+            requestPermissions();
+        }
+
+    }
+
+    private void requestPermissions() {
+
+        Intent intent = new Intent(getApplicationContext(), RequestPermissionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 
@@ -111,7 +132,7 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and check into any fence under that Zone
-     * @param fence      - Fence triggered
+     * @param fenceInfo      - Fence triggered
      * @param zoneInfo   - Zone information Fence belongs to
      * @param location   - geographical coordinate where trigger happened
      * @param customData - custom data associated with this Custom Action
@@ -131,7 +152,7 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and checked out from fence under that Zone
-     * @param fence     - Fence user is checked out from
+     * @param fenceInfo     - Fence user is checked out from
      * @param zoneInfo  - Zone information Fence belongs to
      * @param dwellTime - time spent inside the Fence; in minutes
      * @param customData - custom data associated with this Custom Action

@@ -1,4 +1,4 @@
-package bluedot.com.au.simpleintegration;
+package bluedot.com.au.minimalintegration;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 /*
  * @author Bluedot Innovation
- * Copyright (c) 2016 Bluedot Innovation. All rights reserved.
+ * Copyright (c) 2018 Bluedot Innovation. All rights reserved.
  * RequestPermissionActivity handles permission requests needed for running Bluedot Point SDK on Marshmallow devices.
  */
 public class RequestPermissionActivity extends AppCompatActivity {
@@ -19,7 +19,7 @@ public class RequestPermissionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Request permission required for location
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
     }
 
     @Override
