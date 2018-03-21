@@ -8,8 +8,8 @@
 
 
     <Button
+        android:id="@+id/bStopSDK"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Finish Activity"
-        android:id="@+id/bFinishActivity" />
+        android:text="Stop SDK" />
 </LinearLayout>

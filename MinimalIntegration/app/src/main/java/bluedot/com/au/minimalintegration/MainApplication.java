@@ -2,13 +2,24 @@ package bluedot.com.au.minimalintegration;
 
 import android.Manifest;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.Location;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import java.util.List;
@@ -16,6 +27,7 @@ import java.util.Map;
 
 import au.com.bluedot.application.model.Proximity;
 import au.com.bluedot.point.ApplicationNotificationListener;
+import au.com.bluedot.point.BDAuthenticationError;
 import au.com.bluedot.point.ServiceStatusListener;
 import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.BeaconInfo;
@@ -23,6 +35,8 @@ import au.com.bluedot.point.net.engine.FenceInfo;
 import au.com.bluedot.point.net.engine.LocationInfo;
 import au.com.bluedot.point.net.engine.ServiceManager;
 import au.com.bluedot.point.net.engine.ZoneInfo;
+
+import static android.app.Notification.PRIORITY_MAX;
 
 /*
  * @author Bluedot Innovation
@@ -33,10 +47,13 @@ public class MainApplication extends Application implements ServiceStatusListene
 
 
     ServiceManager mServiceManager;
+    private NetworkChangeReceiver networkChangeReceiver;
 
     String packageName = "";   //Package name for the App
     String apiKey = ""; //API key for the App
     String emailId = ""; //Registration email Id
+    // set this to true if you want to start the SDK with service sticky and auto-start mode on boot complete.
+    // Please refer to Bluedot Developer documentation for further information.
     boolean restartMode = true;
     private Handler handler;
 
@@ -59,13 +76,11 @@ public class MainApplication extends Application implements ServiceStatusListene
         if(checkPermissionCoarse == PackageManager.PERMISSION_GRANTED && checkPermissionFine == PackageManager.PERMISSION_GRANTED) {
             mServiceManager = ServiceManager.getInstance(this);
 
-            // Android O handling - Set the foreground Service Notification which will fire only if running on Android O and above
-            Intent actionIntent = new Intent(this, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT );
-            mServiceManager.setForegroundServiceNotification(R.mipmap.ic_launcher, getString(R.string.foreground_notification_title), getString(R.string.foreground_notification_text), pendingIntent, false);
-
             if(!mServiceManager.isBlueDotPointServiceRunning()) {
-                mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this,restartMode);
+                // Setting Notification for foreground service, required for Android Oreo and above.
+                // Setting targetAllAPIs to TRUE will display foreground notification for Android versions lower than Oreo
+                mServiceManager.setForegroundServiceNotification(createNotification(), false);
+                mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this, restartMode);
             }
         }
         else
@@ -118,6 +133,20 @@ public class MainApplication extends Application implements ServiceStatusListene
     @Override
     public void onBlueDotPointServiceError(BDError bdError) {
 
+        //Internet Connectivity may not be available on boot complete
+        //This is a retry strategy to make an attempt for authentication of SDK once internet connectivity is available.
+        if(bdError instanceof BDAuthenticationError) {
+            if(bdError.getReason().contains("Network is not available")) {
+                if(mServiceManager != null && !mServiceManager.isBlueDotPointServiceRunning()) {
+                    //SDK auth failed due to no network
+                    networkChangeReceiver = new NetworkChangeReceiver();
+                    registerReceiver(
+                            networkChangeReceiver,
+                            new IntentFilter(
+                                    ConnectivityManager.CONNECTIVITY_ACTION));
+                }
+            }
+        }
     }
 
     /**
@@ -208,5 +237,88 @@ public class MainApplication extends Application implements ServiceStatusListene
                         .show();
             }
         });
+    }
+
+    /**
+     * Creates notification channel and notification, required for foreground service notification.
+     * @return notification
+     */
+
+    private Notification createNotification() {
+
+        String channelId;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            channelId = "Bluedot";
+            String channelName = "Bluedot Service";
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW);
+            notificationChannel.enableLights(false);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(false);
+            NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            Notification.Builder notification = new Notification.Builder(getApplicationContext(), channelId)
+                    .setContentText(getString(R.string.foreground_notification_title))
+                    .setContentTitle(getString(R.string.foreground_notification_text))
+                    .setOngoing(true)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setSmallIcon(R.mipmap.ic_launcher);
+
+            return notification.build();
+        } else {
+
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext())
+                    .setContentText(getString(R.string.foreground_notification_title))
+                    .setContentTitle(getString(R.string.foreground_notification_text))
+                    .setOngoing(true)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setPriority(PRIORITY_MAX)
+                    .setSmallIcon(R.mipmap.ic_launcher);
+
+            return notification.build();
+        }
+    }
+
+    /**
+     * Custom broadcast receiver to check for connectivity
+     */
+    class NetworkChangeReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(isInternetAvailable()) {
+                initPointSDK();
+                if (networkChangeReceiver != null) {
+                    unregisterReceiver(networkChangeReceiver);
+                }
+            }
+        }
+    }
+
+    /**
+     * Check whether internet is available
+     * @return
+     */
+    private boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isMobile = false, isWifi = false;
+
+        NetworkInfo[] infoAvailableNetworks = cm.getAllNetworkInfo();
+
+        if (infoAvailableNetworks != null) {
+            for (NetworkInfo network : infoAvailableNetworks) {
+
+                if (network.getType() == ConnectivityManager.TYPE_WIFI) {
+                    if (network.isConnected() && network.isAvailable())
+                        isWifi = true;
+                }
+                if (network.getType() == ConnectivityManager.TYPE_MOBILE) {
+                    if (network.isConnected() && network.isAvailable())
+                        isMobile = true;
+                }
+            }
+        }
+
+        return isMobile || isWifi;
     }
 }

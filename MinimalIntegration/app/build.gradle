@@ -23,5 +23,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'com.github.Bluedot-Innovation:PointSDK-Android:1.10'
+    implementation 'com.github.Bluedot-Innovation:PointSDK-Android:1.11.1'
 }
