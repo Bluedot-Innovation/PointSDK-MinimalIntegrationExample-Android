@@ -250,7 +250,7 @@ public class MainApplication extends Application implements ServiceStatusListene
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             channelId = "Bluedot";
             String channelName = "Bluedot Service";
-            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW);
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.enableLights(false);
             notificationChannel.setLightColor(Color.RED);
             notificationChannel.enableVibration(false);

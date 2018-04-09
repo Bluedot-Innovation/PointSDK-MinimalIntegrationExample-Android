@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "bluedot.com.au.simpleintegration"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -23,5 +23,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'com.github.Bluedot-Innovation:PointSDK-Android:1.11.1'
+    implementation 'com.github.Bluedot-Innovation:PointSDK-Android:1.11.2'
 }
