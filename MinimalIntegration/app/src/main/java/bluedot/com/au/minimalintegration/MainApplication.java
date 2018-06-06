@@ -47,7 +47,6 @@ public class MainApplication extends Application implements ServiceStatusListene
 
 
     ServiceManager mServiceManager;
-    private NetworkChangeReceiver networkChangeReceiver;
 
     String packageName = "";   //Package name for the App
     String apiKey = ""; //API key for the App
@@ -133,20 +132,6 @@ public class MainApplication extends Application implements ServiceStatusListene
     @Override
     public void onBlueDotPointServiceError(BDError bdError) {
 
-        //Internet Connectivity may not be available on boot complete
-        //This is a retry strategy to make an attempt for authentication of SDK once internet connectivity is available.
-        if(bdError instanceof BDAuthenticationError) {
-            if(bdError.getReason().contains("Network is not available")) {
-                if(mServiceManager != null && !mServiceManager.isBlueDotPointServiceRunning()) {
-                    //SDK auth failed due to no network
-                    networkChangeReceiver = new NetworkChangeReceiver();
-                    registerReceiver(
-                            networkChangeReceiver,
-                            new IntentFilter(
-                                    ConnectivityManager.CONNECTIVITY_ACTION));
-                }
-            }
-        }
     }
 
     /**
@@ -277,48 +262,5 @@ public class MainApplication extends Application implements ServiceStatusListene
 
             return notification.build();
         }
-    }
-
-    /**
-     * Custom broadcast receiver to check for connectivity
-     */
-    class NetworkChangeReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(isInternetAvailable()) {
-                initPointSDK();
-                if (networkChangeReceiver != null) {
-                    unregisterReceiver(networkChangeReceiver);
-                }
-            }
-        }
-    }
-
-    /**
-     * Check whether internet is available
-     * @return
-     */
-    private boolean isInternetAvailable() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isMobile = false, isWifi = false;
-
-        NetworkInfo[] infoAvailableNetworks = cm.getAllNetworkInfo();
-
-        if (infoAvailableNetworks != null) {
-            for (NetworkInfo network : infoAvailableNetworks) {
-
-                if (network.getType() == ConnectivityManager.TYPE_WIFI) {
-                    if (network.isConnected() && network.isAvailable())
-                        isWifi = true;
-                }
-                if (network.getType() == ConnectivityManager.TYPE_MOBILE) {
-                    if (network.isConnected() && network.isAvailable())
-                        isMobile = true;
-                }
-            }
-        }
-
-        return isMobile || isWifi;
     }
 }
