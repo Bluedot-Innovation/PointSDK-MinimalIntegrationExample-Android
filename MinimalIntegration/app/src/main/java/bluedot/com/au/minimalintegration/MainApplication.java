@@ -48,9 +48,7 @@ public class MainApplication extends Application implements ServiceStatusListene
 
     ServiceManager mServiceManager;
 
-    String packageName = "";   //Package name for the App
-    String apiKey = ""; //API key for the App
-    String emailId = ""; //Registration email Id
+    private String apiKey = ""; //API key for the App 
     // set this to true if you want to start the SDK with service sticky and auto-start mode on boot complete.
     // Please refer to Bluedot Developer documentation for further information.
     boolean restartMode = true;
@@ -79,7 +77,7 @@ public class MainApplication extends Application implements ServiceStatusListene
                 // Setting Notification for foreground service, required for Android Oreo and above.
                 // Setting targetAllAPIs to TRUE will display foreground notification for Android versions lower than Oreo
                 mServiceManager.setForegroundServiceNotification(createNotification(), false);
-                mServiceManager.sendAuthenticationRequest(packageName,apiKey,emailId,this, restartMode);
+                mServiceManager.sendAuthenticationRequest(apiKey,this, restartMode);
             }
         }
         else
