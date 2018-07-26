@@ -231,8 +231,8 @@ public class MainApplication extends Application implements ServiceStatusListene
 
         String channelId;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channelId = "Bluedot";
-            String channelName = "Bluedot Service";
+            channelId = "Bluedot" + getString(R.string.app_name);
+            String channelName = "Bluedot Service" + getString(R.string.app_name);
             NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.enableLights(false);
             notificationChannel.setLightColor(Color.RED);
@@ -241,8 +241,9 @@ public class MainApplication extends Application implements ServiceStatusListene
             notificationManager.createNotificationChannel(notificationChannel);
 
             Notification.Builder notification = new Notification.Builder(getApplicationContext(), channelId)
-                    .setContentText(getString(R.string.foreground_notification_title))
-                    .setContentTitle(getString(R.string.foreground_notification_text))
+                    .setContentTitle(getString(R.string.foreground_notification_title))
+                    .setContentText(getString(R.string.foreground_notification_text))
+                    .setStyle(new Notification.BigTextStyle().bigText(getString(R.string.foreground_notification_text)))
                     .setOngoing(true)
                     .setCategory(Notification.CATEGORY_SERVICE)
                     .setSmallIcon(R.mipmap.ic_launcher);
@@ -251,8 +252,9 @@ public class MainApplication extends Application implements ServiceStatusListene
         } else {
 
             NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext())
-                    .setContentText(getString(R.string.foreground_notification_title))
-                    .setContentTitle(getString(R.string.foreground_notification_text))
+                    .setContentTitle(getString(R.string.foreground_notification_title))
+                    .setContentText(getString(R.string.foreground_notification_text))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.foreground_notification_text)))
                     .setOngoing(true)
                     .setCategory(Notification.CATEGORY_SERVICE)
                     .setPriority(PRIORITY_MAX)
