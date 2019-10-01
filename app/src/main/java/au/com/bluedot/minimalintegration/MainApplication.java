@@ -179,7 +179,6 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and check into any beacon under that Zone
-     *
      * @param beaconInfo - Beacon triggered
      * @param zoneInfo   - Zone information Beacon belongs to
      * @param location   - geographical coordinate where trigger happened
@@ -201,7 +200,6 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and checked out from beacon under that Zone
-     *
      * @param beaconInfo - Beacon is checked out from
      * @param zoneInfo   - Zone information Beacon belongs to
      * @param dwellTime  - time spent inside the Beacon area; in minutes
@@ -221,7 +219,6 @@ public class MainApplication extends Application implements ServiceStatusListene
 
     /**
      * Creates notification channel and notification, required for foreground service notification.
-     *
      * @return notification
      */
 
