@@ -60,28 +60,26 @@ public class MainApplication extends Application implements ServiceStatusListene
 
     public void initPointSDK() {
 
-        int checkPermissionCoarse = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
-        int checkPermissionFine = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        boolean locationPermissionGranted =
+                ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        boolean backgroundPermissionGranted = (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
-        if(checkPermissionCoarse == PackageManager.PERMISSION_GRANTED && checkPermissionFine == PackageManager.PERMISSION_GRANTED) {
+        if (locationPermissionGranted && backgroundPermissionGranted) {
             mServiceManager = ServiceManager.getInstance(this);
 
-            if(!mServiceManager.isBlueDotPointServiceRunning()) {
+            if (!mServiceManager.isBlueDotPointServiceRunning()) {
                 // Setting Notification for foreground service, required for Android Oreo and above.
                 // Setting targetAllAPIs to TRUE will display foreground notification for Android versions lower than Oreo
                 mServiceManager.setForegroundServiceNotification(createNotification(), false);
-                mServiceManager.sendAuthenticationRequest(apiKey,this, restartMode);
+                mServiceManager.sendAuthenticationRequest(apiKey, this, restartMode);
             }
-        }
-        else
-        {
+        } else {
             requestPermissions();
         }
-
     }
 
     private void requestPermissions() {
-
         Intent intent = new Intent(getApplicationContext(), RequestPermissionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -118,6 +116,7 @@ public class MainApplication extends Application implements ServiceStatusListene
      * <p> The BDError.isFatal() indicates if error is fatal and service is not operable.
      * Followed by onBlueDotPointServiceStop() indicating service is stopped.
      * <p> The BDError.getReason() is useful to analyse error cause.
+     *
      * @param bdError
      */
     @Override
@@ -127,6 +126,7 @@ public class MainApplication extends Application implements ServiceStatusListene
 
     /**
      * <p>The method deliveries the ZoneInfo list when the rules are updated. Your app is able to get the latest ZoneInfo when the rules are updated.</p>
+     *
      * @param list
      */
     @Override
@@ -137,7 +137,8 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and check into any fence under that Zone
-     * @param fenceInfo      - Fence triggered
+     *
+     * @param fenceInfo  - Fence triggered
      * @param zoneInfo   - Zone information Fence belongs to
      * @param location   - geographical coordinate where trigger happened
      * @param customData - custom data associated with this Custom Action
@@ -149,7 +150,7 @@ public class MainApplication extends Application implements ServiceStatusListene
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(),"Checked into fence: " + fenceInfo.getName(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Checked into fence: " + fenceInfo.getName(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -157,9 +158,10 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and checked out from fence under that Zone
-     * @param fenceInfo     - Fence user is checked out from
-     * @param zoneInfo  - Zone information Fence belongs to
-     * @param dwellTime - time spent inside the Fence; in minutes
+     *
+     * @param fenceInfo  - Fence user is checked out from
+     * @param zoneInfo   - Zone information Fence belongs to
+     * @param dwellTime  - time spent inside the Fence; in minutes
      * @param customData - custom data associated with this Custom Action
      */
     @Override
@@ -177,6 +179,7 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and check into any beacon under that Zone
+     *
      * @param beaconInfo - Beacon triggered
      * @param zoneInfo   - Zone information Beacon belongs to
      * @param location   - geographical coordinate where trigger happened
@@ -190,7 +193,7 @@ public class MainApplication extends Application implements ServiceStatusListene
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(),"Entered: " + beaconInfo.getName(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Entered: " + beaconInfo.getName(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -198,6 +201,7 @@ public class MainApplication extends Application implements ServiceStatusListene
     /**
      * This callback happens when user is subscribed to Application Notification
      * and checked out from beacon under that Zone
+     *
      * @param beaconInfo - Beacon is checked out from
      * @param zoneInfo   - Zone information Beacon belongs to
      * @param dwellTime  - time spent inside the Beacon area; in minutes
@@ -217,6 +221,7 @@ public class MainApplication extends Application implements ServiceStatusListene
 
     /**
      * Creates notification channel and notification, required for foreground service notification.
+     *
      * @return notification
      */
 
