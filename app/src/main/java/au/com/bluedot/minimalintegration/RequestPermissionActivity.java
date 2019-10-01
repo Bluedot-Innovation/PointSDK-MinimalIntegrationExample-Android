@@ -1,4 +1,4 @@
-package bluedot.com.au.minimalintegration;
+package au.com.bluedot.minimalintegration;
 
 import android.Manifest;
 import android.content.pm.PackageManager;

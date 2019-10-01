@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="bluedot.com.au.minimalintegration" >
+    package="au.com.bluedot.minimalintegration">
 
 
     <application
         android:allowBackup="true"
-        android:name="bluedot.com.au.minimalintegration.MainApplication"
+        android:name="au.com.bluedot.minimalintegration.MainApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name="bluedot.com.au.minimalintegration.MainActivity" >
+        <activity android:name="au.com.bluedot.minimalintegration.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RequestPermissionActivity" />
+        <activity android:name="au.com.bluedot.minimalintegration.RequestPermissionActivity" />
 
     </application>
 
