@@ -1,23 +1,17 @@
-package bluedot.com.au.minimalintegration;
+package au.com.bluedot.minimalintegration;
 
 import android.Manifest;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
@@ -27,7 +21,6 @@ import java.util.Map;
 
 import au.com.bluedot.application.model.Proximity;
 import au.com.bluedot.point.ApplicationNotificationListener;
-import au.com.bluedot.point.BDAuthenticationError;
 import au.com.bluedot.point.ServiceStatusListener;
 import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.BeaconInfo;
