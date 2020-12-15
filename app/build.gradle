@@ -25,8 +25,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.gitlab.bluedotio.android:point_sdk_android:15.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.gitlab.bluedotio.android:point_sdk_android:15.2.0'
 }
