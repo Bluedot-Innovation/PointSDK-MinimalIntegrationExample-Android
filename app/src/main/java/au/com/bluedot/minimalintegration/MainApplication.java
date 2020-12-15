@@ -54,8 +54,12 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                     String text = "Initialization Result ";
                     if(bdError != null)
                         text = text + bdError.getReason();
-                    else
+                    else {
                         text = text + "Success ";
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
                     Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
                 };
                 //ProjectID for the App 
@@ -78,8 +82,12 @@ public class MainApplication extends Application implements TempoServiceStatusLi
             String text = "Reset Finished ";
             if(bdError != null)
                 text = text + bdError.getReason();
-            else
+            else {
                 text = text + "Success ";
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
             Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
         });
     }
