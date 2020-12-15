@@ -10,24 +10,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
+import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import android.widget.Toast;
-
-import java.util.List;
-import java.util.Map;
-
-import au.com.bluedot.application.model.Proximity;
-import au.com.bluedot.point.ApplicationNotificationListener;
-import au.com.bluedot.point.ServiceStatusListener;
 import au.com.bluedot.point.net.engine.BDError;
-import au.com.bluedot.point.net.engine.BeaconInfo;
-import au.com.bluedot.point.net.engine.FenceInfo;
-import au.com.bluedot.point.net.engine.LocationInfo;
+import au.com.bluedot.point.net.engine.GeoTriggeringService;
+import au.com.bluedot.point.net.engine.InitializationResultListener;
 import au.com.bluedot.point.net.engine.ServiceManager;
-import au.com.bluedot.point.net.engine.ZoneInfo;
+import au.com.bluedot.point.net.engine.TempoService;
+import au.com.bluedot.point.net.engine.TempoServiceStatusListener;
+import org.jetbrains.annotations.Nullable;
 
 import static android.app.Notification.PRIORITY_MAX;
 
@@ -36,24 +28,14 @@ import static android.app.Notification.PRIORITY_MAX;
  * Copyright (c) 2018 Bluedot Innovation. All rights reserved.
  * MainApplication demonstrates the implementation Bluedot Point SDK and related callbacks.
  */
-public class MainApplication extends Application implements ServiceStatusListener, ApplicationNotificationListener {
+public class MainApplication extends Application implements TempoServiceStatusListener {
 
 
     ServiceManager mServiceManager;
 
-    private String apiKey = ""; //API key for the App 
-    // set this to true if you want to start the SDK with service sticky and auto-start mode on boot complete.
-    // Please refer to Bluedot Developer documentation for further information.
-    boolean restartMode = true;
-    private Handler handler;
-
-
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //Initializing Handler bind to UI Thread
-        handler = new Handler(Looper.getMainLooper());
         // initialize point sdk
         initPointSDK();
     }
@@ -62,17 +44,23 @@ public class MainApplication extends Application implements ServiceStatusListene
 
         boolean locationPermissionGranted =
                 ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        boolean backgroundPermissionGranted = (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-                || ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
-        if (locationPermissionGranted && backgroundPermissionGranted) {
+        if (locationPermissionGranted) {
             mServiceManager = ServiceManager.getInstance(this);
 
-            if (!mServiceManager.isBlueDotPointServiceRunning()) {
-                // Setting Notification for foreground service, required for Android Oreo and above.
-                // Setting targetAllAPIs to TRUE will display foreground notification for Android versions lower than Oreo
-                mServiceManager.setForegroundServiceNotification(createNotification(), false);
-                mServiceManager.sendAuthenticationRequest(apiKey, this, restartMode);
+            if (!mServiceManager.isBluedotServiceInitialized()) {
+
+                InitializationResultListener resultListener = bdError -> {
+                    String text = "Initialization Result ";
+                    if(bdError != null)
+                        text = text + bdError.getReason();
+                    else
+                        text = text + "Success ";
+                    Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
+                };
+                //ProjectID for the App 
+                String projectId = "1afc3ebb-bba7-404d-8d89-fa7539a1b7fa";
+                mServiceManager.initialize(projectId, resultListener);
             }
         } else {
             requestPermissions();
@@ -85,138 +73,49 @@ public class MainApplication extends Application implements ServiceStatusListene
         startActivity(intent);
     }
 
-
-    /**
-     * <p>It is called when BlueDotPointService started successful, your app logic code using the Bluedot service could start from here.</p>
-     * <p>This method is off the UI thread.</p>
-     */
-    @Override
-    public void onBlueDotPointServiceStartedSuccess() {
-        mServiceManager.subscribeForApplicationNotification(this);
-
-    }
-
-    /**
-     * <p>This method notifies the client application that BlueDotPointService is stopped. Your app could release the resources related to Bluedot service from here.</p>
-     * <p>It is called off the UI thread.</p>
-     */
-    @Override
-    public void onBlueDotPointServiceStop() {
-        mServiceManager.unsubscribeForApplicationNotification(this);
-    }
-
-    /**
-     * <p>The method delivers the error from BlueDotPointService by a generic BDError. There are several types of error such as
-     * - BDAuthenticationError (fatal)
-     * - BDNetworkError (fatal / non fatal)
-     * - LocationServiceNotEnabledError (fatal / non fatal)
-     * - RuleDownloadError (non fatal)
-     * - BLENotAvailableError (non fatal)
-     * - BluetoothNotEnabledError (non fatal)
-     * <p> The BDError.isFatal() indicates if error is fatal and service is not operable.
-     * Followed by onBlueDotPointServiceStop() indicating service is stopped.
-     * <p> The BDError.getReason() is useful to analyse error cause.
-     *
-     * @param bdError
-     */
-    @Override
-    public void onBlueDotPointServiceError(BDError bdError) {
-
-    }
-
-    /**
-     * <p>The method deliveries the ZoneInfo list when the rules are updated. Your app is able to get the latest ZoneInfo when the rules are updated.</p>
-     *
-     * @param list
-     */
-    @Override
-    public void onRuleUpdate(List<ZoneInfo> list) {
-
-    }
-
-    /**
-     * This callback happens when user is subscribed to Application Notification
-     * and check into any fence under that Zone
-     *
-     * @param fenceInfo  - Fence triggered
-     * @param zoneInfo   - Zone information Fence belongs to
-     * @param location   - geographical coordinate where trigger happened
-     * @param customData - custom data associated with this Custom Action
-     * @param isCheckOut - CheckOut will be tracked and delivered once device left the Fence
-     */
-    @Override
-    public void onCheckIntoFence(final FenceInfo fenceInfo, ZoneInfo zoneInfo, LocationInfo location, Map<String, String> customData, boolean isCheckOut) {
-        //Using handler to pass Runnable into UI thread to interact with UI Elements
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "Checked into fence: " + fenceInfo.getName(), Toast.LENGTH_LONG).show();
-            }
+    void reset(){
+        mServiceManager.reset(bdError -> {
+            String text = "Reset Finished ";
+            if(bdError != null)
+                text = text + bdError.getReason();
+            else
+                text = text + "Success ";
+            Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
         });
     }
 
-    /**
-     * This callback happens when user is subscribed to Application Notification
-     * and checked out from fence under that Zone
-     *
-     * @param fenceInfo  - Fence user is checked out from
-     * @param zoneInfo   - Zone information Fence belongs to
-     * @param dwellTime  - time spent inside the Fence; in minutes
-     * @param customData - custom data associated with this Custom Action
-     */
-    @Override
-    public void onCheckedOutFromFence(final FenceInfo fenceInfo, ZoneInfo zoneInfo, final int dwellTime, Map<String, String> customData) {
-        //Using handler to pass Runnable into UI thread to interact with UI Elements
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "Left: " + fenceInfo.getName() + " dwellTime,min=" + dwellTime, Toast.LENGTH_LONG)
-                        .show();
+    void startGeoTrigger() {
+        Notification notification = createNotification();
+
+        GeoTriggeringService.builder()
+                .notification(notification)
+                .start(this, geoTriggerError -> {
+                    if (geoTriggerError != null) {
+                        Toast.makeText(getApplicationContext(),"Error in starting GeoTrigger"+geoTriggerError.getReason(),Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Toast.makeText(getApplicationContext(),"GeoTrigger started successfully",Toast.LENGTH_LONG).show();
+
+                });
+    }
+
+    void stopGeoTrigger() {
+        GeoTriggeringService.stop(getApplicationContext(), bdError -> {
+            String text = "GeoTrigger stop ";
+            if (bdError != null) {
+                text = text + bdError.getReason();
+            } else {
+                text = text + "Success ";
             }
+            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
         });
     }
 
-    /**
-     * This callback happens when user is subscribed to Application Notification
-     * and check into any beacon under that Zone
-     *
-     * @param beaconInfo - Beacon triggered
-     * @param zoneInfo   - Zone information Beacon belongs to
-     * @param location   - geographical coordinate where trigger happened
-     * @param proximity  - the proximity at which the trigger occurred
-     * @param customData - custom data associated with this Custom Action
-     * @param isCheckOut - CheckOut will be tracked and delivered once device left the Beacon advertisement range
-     */
-    @Override
-    public void onCheckIntoBeacon(final BeaconInfo beaconInfo, ZoneInfo zoneInfo, LocationInfo location, Proximity proximity, Map<String, String> customData, boolean isCheckOut) {
-        //Using handler to pass Runnable into UI thread to interact with UI Elements
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "Entered: " + beaconInfo.getName(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    /**
-     * This callback happens when user is subscribed to Application Notification
-     * and checked out from beacon under that Zone
-     *
-     * @param beaconInfo - Beacon is checked out from
-     * @param zoneInfo   - Zone information Beacon belongs to
-     * @param dwellTime  - time spent inside the Beacon area; in minutes
-     * @param customData - custom data associated with this Custom Action
-     */
-    @Override
-    public void onCheckedOutFromBeacon(final BeaconInfo beaconInfo, ZoneInfo zoneInfo, final int dwellTime, Map<String, String> customData) {
-        //Using handler to pass Runnable into UI thread to interact with UI Elements
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "Left: " + beaconInfo.getName() + " dwellTime,min=" + dwellTime, Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
+    void startTempo(){
+        TempoService.builder()
+                .notification(createNotification())
+                .destinationId("newHome123")
+                .start(getApplicationContext(), this);
     }
 
     /**
@@ -260,5 +159,15 @@ public class MainApplication extends Application implements ServiceStatusListene
 
             return notification.build();
         }
+    }
+
+    @Override public void onTempoResult(@Nullable BDError bdError) {
+        String text = "Tempo start";
+        if (bdError != null) {
+            text = text + bdError.getReason();
+        } else {
+            text = text + "Success";
+        }
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 }
