@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import android.widget.Toast;
 import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.ServiceManager;
@@ -16,39 +15,19 @@ import au.com.bluedot.point.net.engine.TempoService;
  */
 public class MainActivity extends Activity implements View.OnClickListener{
 
-    Button bInit;
-    Button bReset;
-
-    Button bStartGeoTrigger;
-    Button bStopGeoTrigger;
-
-    Button bStartTempo;
-    Button bStopTempo;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        initUI();
     }
 
-    private void initUI() {
+    @Override protected void onStart() {
+        super.onStart();
 
-        //bStopSDK = (Button) findViewById(R.id.bStopSDK);
-        //
-        //bStopSDK.setOnClickListener(this);
+        Button init = findViewById(R.id.bInit);
+        init.setEnabled(
+                !ServiceManager.getInstance(getApplicationContext()).isBluedotServiceInitialized());
     }
-
-    private void stopSDK(){
-        ServiceManager.getInstance(this).stopPointService();
-        finish();
-    }
-
-    private void startSDK(){
-
-
-   }
 
     @Override
     public void onClick(View v) {
