@@ -59,7 +59,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                     Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
                 };
                 //ProjectID for the App 
-                String projectId = "1afc3ebb-bba7-404d-8d89-fa7539a1b7fa";
+                String projectId = "<YOUR-PROJECT-ID>";
                 mServiceManager.initialize(projectId, resultListener);
             }
         } else {
@@ -114,7 +114,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
     void startTempo(){
         TempoService.builder()
                 .notification(createNotification())
-                .destinationId("newHome123")
+                .destinationId("<DESTINATION_ID>")
                 .start(getApplicationContext(), this);
     }
 
@@ -126,9 +126,8 @@ public class MainApplication extends Application implements TempoServiceStatusLi
 
     private Notification createNotification() {
 
-        String channelId;
+        String channelId  = "Bluedot" + getString(R.string.app_name);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channelId = "Bluedot" + getString(R.string.app_name);
             String channelName = "Bluedot Service" + getString(R.string.app_name);
             NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.enableLights(false);
@@ -148,15 +147,13 @@ public class MainApplication extends Application implements TempoServiceStatusLi
             return notification.build();
         } else {
 
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext())
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext(), channelId)
                     .setContentTitle(getString(R.string.foreground_notification_title))
                     .setContentText(getString(R.string.foreground_notification_text))
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.foreground_notification_text)))
                     .setOngoing(true)
-                    .setCategory(Notification.CATEGORY_SERVICE)
                     .setPriority(PRIORITY_MAX)
                     .setSmallIcon(R.mipmap.ic_launcher);
-
             return notification.build();
         }
     }
