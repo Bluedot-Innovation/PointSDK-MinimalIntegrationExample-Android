@@ -3,8 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
 
+
     defaultConfig {
-        applicationId "au.com.bluedot.minimalintegration"
+        applicationId "au.com.bluedot.simpleintegration"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
@@ -12,7 +13,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -21,40 +22,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    signingConfigs {
-        release {
-            storeFile file("../app/BluedotSignaturePointApp")
-            storePassword "Blue.Sign"
-            keyAlias "pointtestapp"
-            keyPassword "Blue.Sign"
-        }
-        debug {
-            storeFile file("../app/BluedotSignaturePointApp")
-            storePassword "Blue.Sign"
-            keyAlias "pointtestapp"
-            keyPassword "Blue.Sign"
-        }
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-            multiDexEnabled true
-            shrinkResources true
-        }
-
-        debug {
-            minifyEnabled false
-            signingConfig signingConfigs.debug
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-debug'
-            multiDexEnabled false
-        }
-    }
-
 }
 
 dependencies {
