@@ -29,9 +29,9 @@ import static android.app.Notification.PRIORITY_MAX;
  * MainApplication demonstrates the implementation Bluedot Point SDK and related callbacks.
  */
 public class MainApplication extends Application implements TempoServiceStatusListener {
-
-
     ServiceManager mServiceManager;
+    private final static String projectId = "<YOUR-PROJECT-ID>";   //ProjectId from Canvas
+    private final static String destinationId = "<TEMPO-DESTINATION_ID>"; //destinationId to start Tempo 
 
     @Override
     public void onCreate() {
@@ -62,8 +62,6 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                     }
                     Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
                 };
-                //ProjectID for the App 
-                String projectId = "<YOUR-PROJECT-ID>";
                 mServiceManager.initialize(projectId, resultListener);
             }
         } else {
@@ -122,7 +120,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
     void startTempo(){
         TempoService.builder()
                 .notification(createNotification())
-                .destinationId("<DESTINATION_ID>")
+                .destinationId(destinationId)
                 .start(getApplicationContext(), this);
     }
 
@@ -167,7 +165,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
     }
 
     @Override public void onTempoResult(@Nullable BDError bdError) {
-        String text = "Tempo start";
+        String text = "Tempo start ";
         if (bdError != null) {
             text = text + bdError.getReason();
         } else {

@@ -9,7 +9,6 @@ import au.com.bluedot.point.net.engine.BluedotServiceReceiver;
 import org.jetbrains.annotations.NotNull;
 
 public class BluedotErrorReceiver extends BluedotServiceReceiver {
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
     /**
      * Called when the Bluedot Point SDK encounters errors. If the error is fatal, the SDK services
@@ -22,7 +21,7 @@ public class BluedotErrorReceiver extends BluedotServiceReceiver {
      */
     @Override
     public void onBluedotServiceError(@NotNull BDError bdError, @NotNull Context context) {
-        handler.post(() -> Toast.makeText(context, "Bluedot Service Error " + bdError.getReason(),
-                                          Toast.LENGTH_LONG).show());
+        Toast.makeText(context, "Bluedot Service Error " + bdError.getReason(),
+                                          Toast.LENGTH_LONG).show();
     }
 }
