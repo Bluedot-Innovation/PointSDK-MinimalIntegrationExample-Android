@@ -9,8 +9,6 @@ import au.com.bluedot.point.net.engine.TempoTrackingReceiver;
 import org.jetbrains.annotations.NotNull;
 
 public class AppTempoReceiver extends TempoTrackingReceiver {
-    private final Handler handler = new Handler(Looper.getMainLooper());
-
     /**
      * Called when there is an error that has caused Tempo to stop.
      *
@@ -19,10 +17,9 @@ public class AppTempoReceiver extends TempoTrackingReceiver {
      * @param context: Android context
      * @since 15.3.0
      */
-
     @Override
     public void tempoStoppedWithError(@NotNull BDError bdError, @NotNull Context context) {
-        handler.post(() -> Toast.makeText(context, "Error during Tempo " + bdError.getReason(),
-                                  Toast.LENGTH_LONG).show());
+        Toast.makeText(context, "Error during Tempo " + bdError.getReason(),
+                                  Toast.LENGTH_LONG).show();
     }
 }
