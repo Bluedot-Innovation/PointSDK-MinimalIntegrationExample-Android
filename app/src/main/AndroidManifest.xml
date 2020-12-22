@@ -20,6 +20,35 @@
 
         <activity android:name="au.com.bluedot.minimalintegration.RequestPermissionActivity" />
 
+        <receiver
+            android:name="au.com.bluedot.minimalintegration.BluedotErrorReceiver"
+            android:enabled="true"
+            android:exported="false"
+            >
+            <intent-filter>
+                <action android:name="io.bluedot.point.SERVICE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="au.com.bluedot.minimalintegration.AppGeoTriggerReceiver"
+            android:enabled="true"
+            android:exported="false"
+            >
+            <intent-filter>
+                <action android:name="io.bluedot.point.GEOTRIGGER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="au.com.bluedot.minimalintegration.AppTempoReceiver"
+            android:enabled="true"
+            android:exported="false"
+            >
+            <intent-filter>
+                <action android:name="io.bluedot.point.TEMPO" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

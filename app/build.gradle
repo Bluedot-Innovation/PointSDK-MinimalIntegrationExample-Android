@@ -26,5 +26,5 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.gitlab.bluedotio.android:point_sdk_android:15.2.0'
+    implementation 'com.gitlab.bluedotio.android:point_sdk_android:15.3.0'
 }
