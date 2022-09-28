@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
 
 
     defaultConfig {
         applicationId "au.com.bluedot.simpleintegration"
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 33
+        compileSdkVersion 33
         versionCode 1
         versionName "1.0"
     }
@@ -26,5 +26,5 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.gitlab.bluedotio.android:point_sdk_android:15.3.0'
+    implementation 'com.gitlab.bluedotio.android:point_sdk_android:15.4.2'
 }
