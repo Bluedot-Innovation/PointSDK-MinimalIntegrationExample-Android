@@ -1,8 +1,6 @@
 package au.com.bluedot.minimalintegration;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.Toast;
 import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.BluedotServiceReceiver;

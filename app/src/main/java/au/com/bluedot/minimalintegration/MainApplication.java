@@ -5,6 +5,7 @@ import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -64,6 +65,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                 };
                 mServiceManager.initialize(projectId, resultListener);
             }
+            mServiceManager.setCustomMessageAction(MainActivity.class);
         } else {
             requestPermissions();
         }
@@ -131,6 +133,11 @@ public class MainApplication extends Application implements TempoServiceStatusLi
 
     private Notification createNotification() {
 
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
         String channelId  = "Bluedot" + getString(R.string.app_name);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelName = "Bluedot Service" + getString(R.string.app_name);
@@ -146,6 +153,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                     .setContentText(getString(R.string.foreground_notification_text))
                     .setStyle(new Notification.BigTextStyle().bigText(getString(R.string.foreground_notification_text)))
                     .setOngoing(true)
+                    .setContentIntent(pendingIntent)
                     .setCategory(Notification.CATEGORY_SERVICE)
                     .setSmallIcon(R.mipmap.ic_launcher);
 
@@ -157,6 +165,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                     .setContentText(getString(R.string.foreground_notification_text))
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.foreground_notification_text)))
                     .setOngoing(true)
+                    .setContentIntent(pendingIntent)
                     .setPriority(PRIORITY_MAX)
                     .setSmallIcon(R.mipmap.ic_launcher);
             return notification.build();
