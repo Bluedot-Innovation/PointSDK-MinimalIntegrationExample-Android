@@ -24,6 +24,12 @@ import org.jetbrains.annotations.Nullable;
 
 import static android.app.Notification.PRIORITY_MAX;
 
+import java.nio.charset.Charset;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 /*
  * @author Bluedot Innovation
  * Copyright (c) 2018 Bluedot Innovation. All rights reserved.
@@ -32,7 +38,7 @@ import static android.app.Notification.PRIORITY_MAX;
 public class MainApplication extends Application implements TempoServiceStatusListener {
     ServiceManager mServiceManager;
     private final static String projectId = "<YOUR-PROJECT-ID>";   //ProjectId from Canvas
-    private final static String destinationId = "<TEMPO-DESTINATION_ID>"; //destinationId to start Tempo 
+    private final static String destinationId = "<TEMPO-DESTINATION-ID>"; //destinationId to start Tempo
 
     @Override
     public void onCreate() {
@@ -120,10 +126,24 @@ public class MainApplication extends Application implements TempoServiceStatusLi
     }
 
     void startTempo(){
+        Map<String,String> eventMetadata = new HashMap<String, String>();
+        eventMetadata.put("hs_orderId", randomString(5));
+        eventMetadata.put("hs_Customer Name", "Customer");
+        mServiceManager.setCustomEventMetaData(eventMetadata);
         TempoService.builder()
                 .notification(createNotification())
                 .destinationId(destinationId)
                 .start(getApplicationContext(), this);
+    }
+
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static SecureRandom rnd = new SecureRandom();
+
+    private String randomString(int len){
+        StringBuilder sb = new StringBuilder(len);
+        for(int i = 0; i < len; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        return sb.toString();
     }
 
     /**
