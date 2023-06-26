@@ -15,3 +15,14 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn kotlinx.parcelize.Parcelize
+
+#R8 full mode strips generic signatures from return types if not kept.
+-if interface * { @retrofit2.http.* public *** *(...); }
+-keep,allowoptimization,allowshrinking,allowobfuscation class <3>
+
+#R8 full mode strips generic signatures from return types if not kept.
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+
+-keepattributes Signature
+-keep class kotlin.coroutines.Continuation
