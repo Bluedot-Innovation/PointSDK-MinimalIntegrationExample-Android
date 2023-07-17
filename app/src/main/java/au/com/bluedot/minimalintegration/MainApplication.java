@@ -37,7 +37,7 @@ import java.util.Random;
  */
 public class MainApplication extends Application implements TempoServiceStatusListener {
     ServiceManager mServiceManager;
-    private final static String projectId = "1afc3ebb-bba7-404d-8d89-fa7539a1b7fa";   //ProjectId from Canvas
+    private final static String projectId = "<YOUR-PROJECT-ID>";   //ProjectId from Canvas
     private final static String destinationId = "<TEMPO-DESTINATION-ID>"; //destinationId to start Tempo
 
     @Override
