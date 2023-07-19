@@ -2,8 +2,13 @@ package au.com.bluedot.minimalintegration;
 
 import android.content.Context;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
 import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.TempoTrackingReceiver;
+import au.com.bluedot.point.net.engine.event.TempoTrackingUpdate;
+
 import org.jetbrains.annotations.NotNull;
 
 public class AppTempoReceiver extends TempoTrackingReceiver {
@@ -19,5 +24,11 @@ public class AppTempoReceiver extends TempoTrackingReceiver {
     public void tempoStoppedWithError(@NotNull BDError bdError, @NotNull Context context) {
         Toast.makeText(context, "Error during Tempo " + bdError.getReason(),
                                   Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTempoTrackingUpdate(@NonNull TempoTrackingUpdate tempoTrackingUpdate, @NonNull Context context) {
+        Toast.makeText(context, "Tempo update " + tempoTrackingUpdate,
+                Toast.LENGTH_LONG).show();
     }
 }

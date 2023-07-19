@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -68,10 +69,10 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                         startActivity(intent);
                     }
                     Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
+                    Log.d("MinApp"," Initialized with projectID"+projectId);
                 };
                 mServiceManager.initialize(projectId, resultListener);
             }
-            mServiceManager.setCustomMessageAction(MainActivity.class);
         } else {
             requestPermissions();
         }
