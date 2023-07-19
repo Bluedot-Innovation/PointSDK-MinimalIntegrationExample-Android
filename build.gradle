@@ -4,12 +4,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven {
-            url 'https://storage.googleapis.com/r8-releases/raw'
-        }
-    }
-    dependencies {
-        classpath 'com.android.tools:r8:8.0.57'  // Must be before the Gradle Plugin for Android.
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.0.2'
@@ -20,9 +14,6 @@ allprojects {
     repositories {
         google()
         maven { url 'https://jitpack.io' }
-        maven {
-            url 'https://storage.googleapis.com/r8-releases/raw'
-        }
         jcenter()
     }
 }
