@@ -1,6 +1,7 @@
 package au.com.bluedot.minimalintegration;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 import au.com.bluedot.point.net.engine.GeoTriggeringEventReceiver;
+import au.com.bluedot.point.net.engine.ServiceManager;
 import au.com.bluedot.point.net.engine.event.GeoTriggerEvent;
 
 public class AppGeoTriggerReceiver extends GeoTriggeringEventReceiver {
@@ -19,6 +21,8 @@ public class AppGeoTriggerReceiver extends GeoTriggeringEventReceiver {
     @Override public void onZoneInfoUpdate(@NotNull Context context) {
         Toast.makeText(context, "Rules Updated",
                                   Toast.LENGTH_LONG).show();
+        //Access the Zone details from ServiceManager.getInstance(context).getZonesAndFences()
+        Log.i("MinApp", " Zone size "+ ServiceManager.getInstance(context).getZonesAndFences().size());
     }
 
     /**

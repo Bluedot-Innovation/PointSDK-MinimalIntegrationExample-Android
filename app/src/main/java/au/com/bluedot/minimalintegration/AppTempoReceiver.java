@@ -1,6 +1,7 @@
 package au.com.bluedot.minimalintegration;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,9 +27,15 @@ public class AppTempoReceiver extends TempoTrackingReceiver {
                                   Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * This method indicates that Tempo Tracking has an update
+     * @param tempoTrackingUpdate The Tempo tracking update details, including ETA and @ref Destination information.
+     * @param context: Android context
+     */
     @Override
     public void onTempoTrackingUpdate(@NonNull TempoTrackingUpdate tempoTrackingUpdate, @NonNull Context context) {
-        Toast.makeText(context, "Tempo update " + tempoTrackingUpdate,
+        Toast.makeText(context, "Tempo update Received with eta " + tempoTrackingUpdate.getEta(),
                 Toast.LENGTH_LONG).show();
+        Log.i("MinApp", " Tempo update "+ tempoTrackingUpdate.toJson());
     }
 }

@@ -5,9 +5,9 @@ android {
 
     defaultConfig {
         applicationId "au.com.bluedot.simpleintegration"
-        minSdkVersion 21
-        targetSdkVersion 33
-        compileSdkVersion 33
+        minSdk 21
+        targetSdk 34
+        compileSdk 34
         versionCode 2
         versionName "1.0"
     }
@@ -19,14 +19,16 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
+
     namespace 'au.com.bluedot.minimalintegration'
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.gitlab.bluedotio.android:point_sdk_android:dev~16.0.0-SNAPSHOT'
+    implementation 'com.gitlab.bluedotio.android:point_sdk_android:16.0.0'
 }
