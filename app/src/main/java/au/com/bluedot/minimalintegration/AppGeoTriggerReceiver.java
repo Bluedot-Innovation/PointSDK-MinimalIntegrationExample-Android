@@ -35,6 +35,7 @@ public class AppGeoTriggerReceiver extends GeoTriggeringEventReceiver {
     public void onZoneEntryEvent(@NotNull GeoTriggerEvent geoTriggerEvent, @NotNull Context context) {
         String entryDetails = "Entered zone "+geoTriggerEvent.getZoneInfo().getName()+" via fence "+ Objects.requireNonNull(geoTriggerEvent.entryEvent()).getFenceName();
         String customData = geoTriggerEvent.getZoneInfo().getCustomData().toString();
+        Log.i("MinApp", "Entry is "+ geoTriggerEvent);
         Toast.makeText(context, entryDetails + customData,
                        Toast.LENGTH_LONG).show();
     }

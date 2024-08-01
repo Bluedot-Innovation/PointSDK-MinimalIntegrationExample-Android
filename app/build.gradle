@@ -4,7 +4,7 @@ android {
 
 
     defaultConfig {
-        applicationId "au.com.bluedot.simpleintegration"
+        applicationId "au.com.bluedot.minimalintegration"
         minSdk 21
         targetSdk 34
         compileSdk 34
@@ -30,5 +30,5 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.gitlab.bluedotio.android:point_sdk_android:16.0.0'
+    implementation 'com.gitlab.bluedotio.android:point_sdk_android:16.1.0'
 }
