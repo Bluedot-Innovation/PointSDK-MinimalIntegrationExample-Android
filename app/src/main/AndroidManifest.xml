@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +24,15 @@
         </activity>
 
         <activity android:name="au.com.bluedot.minimalintegration.RequestPermissionActivity" />
+
+        <activity android:name="au.com.bluedot.minimalintegration.ChatActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            android:label=" Brain Chat AI"
+            android:parentActivityName="au.com.bluedot.minimalintegration.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="au.com.bluedot.minimalintegration.MainActivity" />
+        </activity>
 
         <receiver
             android:name="au.com.bluedot.minimalintegration.BluedotErrorReceiver"
