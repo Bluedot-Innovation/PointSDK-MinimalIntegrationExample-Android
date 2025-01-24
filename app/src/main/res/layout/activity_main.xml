@@ -63,6 +63,6 @@
         android:id="@+id/bBrainChatAI"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/brain_chat_ai"
+        android:text="@string/chat_ai"
         android:onClick="onClick" />
 </LinearLayout>

@@ -37,7 +37,6 @@ dependencies {
     implementation 'com.gitlab.bluedotio.android:point_sdk_android:ni~add-brain-api-SNAPSHOT'
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'junit:junit:4.12'
-    testImplementation("org.mockito:mockito-core:5.2.0")
-    testImplementation("org.mockito:mockito-junit-jupiter:5.2.0")
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 }

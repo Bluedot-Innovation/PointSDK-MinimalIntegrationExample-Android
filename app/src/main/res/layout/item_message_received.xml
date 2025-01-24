@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="start"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:orientation="vertical"
+    >
 
     <TextView
         android:id="@+id/messageTextView"
@@ -13,4 +15,16 @@
         android:padding="12dp"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:text="@string/received_message" />
+
+    <ImageView
+        android:layoutDirection="ltr"
+        android:id="@+id/imageView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@android:drawable/ic_menu_add"
+        android:background="@drawable/received_message_background"
+        android:contentDescription="@string/received_message"
+        android:padding="12dp" />
+
 </LinearLayout>

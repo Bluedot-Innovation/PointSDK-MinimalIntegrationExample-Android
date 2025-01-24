@@ -8,8 +8,8 @@
   <string name="stop_geo_trigger">Stop Geo-Trigger</string>
   <string name="start_tempo">Start Tempo</string>
   <string name="stop_tempo">Stop Tempo</string>
-    <string name="brain_chat_ai">Brain Chat AI</string>
-    <string name="start_a_new_chat">Create a new chat</string>
-    <string name="received_message">Received Messagw</string>
+    <string name="chat_ai">Brain Chat AI</string>
+    <string name="start_a_new_chat">Start a new conversation</string>
+    <string name="received_message">Received Message</string>
     <string name="sent_message">Message Sent</string>
 </resources>

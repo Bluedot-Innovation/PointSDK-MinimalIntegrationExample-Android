@@ -16,10 +16,10 @@
 
         <TextView
             android:id="@+id/toolbarTitle"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/brain_chat_ai"
+            android:text="@string/chat_ai"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -30,6 +30,8 @@
             android:layout_weight="1"
             android:textAlignment="viewEnd"
             android:text="@string/start_a_new_chat"
-            android:src="@android:drawable/ic_menu_add" />
+            android:textSize="11sp"
+            android:textColor="@android:color/white"
+            android:paddingEnd="8dp"/>
     </LinearLayout>
 </androidx.appcompat.widget.Toolbar>

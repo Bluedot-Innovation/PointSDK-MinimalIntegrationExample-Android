@@ -1,15 +1,13 @@
 package au.com.bluedot.minimalintegration
 
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.bumptech.glide.Glide
+import java.util.UUID
 
 class ChatAdapter(private val messages: MutableList<Message>) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
     private val messagesList = messages
@@ -46,35 +44,35 @@ class ChatAdapter(private val messages: MutableList<Message>) : RecyclerView.Ada
         messagesList.add(message)
     }
 
-    fun updateMessage(messageTest: String, id: String) {
-        val msg = Message(messageTest, false, id)
+    fun updateMessage(messageTest: String, id: UUID, link: String? = null) {
+        val msg = Message(messageTest, false, id, link)
         if (messagesList.find { it.id == id } == null) {
             messagesList.add(msg)
         } else {
-            messagesList.find { it.id == id }?.text = msg.text
+            val msgItem = messagesList.find { it.id == id }
+            msgItem?.text = msg.text
+            msgItem?.link = link
             notifyDataSetChanged()
         }
     }
 
     class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(message: Message) {
+            val imageView = itemView.findViewById<ImageView>(R.id.imageView)
             val textView = itemView.findViewById<TextView>(R.id.messageTextView)
-            if(message.isSentByUser)
+            if (message.isSentByUser)
                 textView.text = message.text
             else {
-                val imageUrl = "https://imgproxy.dev.eu2.rezolve.com/unsafe/rs:fit:256:256:0/g:no/aHR0cHM6Ly9zdGF0aWMuc2t5YXNzZXRzLmNvbS9jb250ZW50c3RhY2svYXNzZXRzL2JsdDE0M2UyMGIwM2Q3MjA0N2UvYmx0ZmYyZjEzMjc4YTQxMzE1OS82NjI5MTAyODUyOGZjMWUzMzk1NWI5MDEvUERQX1NhbXN1bmdfRm9sZF9DcmVhbV9hLnBuZw"
-                val htmlContent = "This is some text with an image: <img src=\"$imageUrl\">"
-                textView.text = parseHtmlStringToMarkdown(message.text)
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    val img = getImage()
-//                    withContext(Dispatchers.Main) {
-//                       // img?.setImageBitmap(image) // Or setImageDrawable(), etc.
-//                        textView.text = Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_LEGACY, img , null)
-//                    }
-//                }
-
+                textView.text= parseHtmlStringToMarkdown(message.text)
+                if(message.link != null) {
+                    imageView.visibility = View.VISIBLE
+                    Glide.with(itemView.context)
+                        .load(message.link)
+                        .into(imageView)
+                } else {
+                    imageView.visibility = View.GONE
+                }
             }
-
         }
     }
 }
