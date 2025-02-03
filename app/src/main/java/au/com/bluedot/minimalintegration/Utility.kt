@@ -15,7 +15,6 @@ fun parseHtmlStringToMarkdown(htmlString: String): Spanned {
         .replace("</b>", "**")
         .replace("<i>","*")
         .replace("</i>","*")
-    Log.i("Neha","parseHtmlStringToMarkdown $formattedString")
 
     val spannableStringBuilder = SpannableStringBuilder(formattedString).also {
         applyBoldStyle(it)

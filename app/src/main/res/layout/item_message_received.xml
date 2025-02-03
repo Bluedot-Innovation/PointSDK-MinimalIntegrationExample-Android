@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="start"
     android:padding="8dp"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/messageTextView"
@@ -26,5 +26,31 @@
         android:background="@drawable/received_message_background"
         android:contentDescription="@string/received_message"
         android:padding="12dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/likeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/like_button"
+            android:src="@drawable/ic_like"
+            android:visibility="gone"
+            app:tint="@color/like_button_color" />
+
+        <ImageButton
+            android:id="@+id/dislikeButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/dislike_button"
+            android:paddingStart="2dp"
+            android:src="@drawable/ic_dislike"
+            android:visibility="gone"
+            app:tint="@color/dislike_button_color" />
+    </LinearLayout>
 
 </LinearLayout>

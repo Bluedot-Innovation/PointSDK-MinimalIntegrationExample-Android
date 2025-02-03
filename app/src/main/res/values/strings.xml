@@ -12,4 +12,6 @@
     <string name="start_a_new_chat">Start a new conversation</string>
     <string name="received_message">Received Message</string>
     <string name="sent_message">Message Sent</string>
+    <string name="like_button">Like button</string>
+    <string name="dislike_button">Dislike button</string>
 </resources>
