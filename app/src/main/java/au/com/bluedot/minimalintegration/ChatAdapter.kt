@@ -1,6 +1,5 @@
 package au.com.bluedot.minimalintegration
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,16 +66,12 @@ class ChatAdapter(private val messages: MutableList<Message>, private val listen
     }
 
     fun updateMessageResponseId(responseId: String, id: UUID) {
-        Log.i("ChatAdapter", "updateMessageResponseId: $responseId index is: ${messagesList.indexOf(messagesList.find { it.id == id })}")
-        messagesList.find { it.id == id }.also { it?.responseId = responseId }
+        messagesList.find { it.id == id }.also {
+            it?.responseId = responseId
+            it?.isLoading = false
+        }
         notifyItemChanged(messagesList.indexOf(messagesList.find { it.id == id }) )
     }
-
-    fun updateMessageEnd(id: UUID) {
-        val msg = messagesList.find { it.id == id }.also { it?.isLoading = false }
-        notifyItemChanged(messagesList.indexOf(msg))
-    }
-
     class ChatViewHolder(itemView: View, listener: ChatAdapterListener) : RecyclerView.ViewHolder(itemView) {
         private val buttonListener = listener
         fun bind(message: Message) {
@@ -95,7 +90,6 @@ class ChatAdapter(private val messages: MutableList<Message>, private val listen
                         .load(message.link)
                         .error(ContextCompat.getDrawable(itemView.context, R.drawable.download_error))
                         .into(imageView)
-                        .onLoadFailed(ContextCompat.getDrawable(itemView.context, R.drawable.download_error))
 
                     likeButton.visibility = View.VISIBLE
                     dislikeButton.visibility = View.VISIBLE

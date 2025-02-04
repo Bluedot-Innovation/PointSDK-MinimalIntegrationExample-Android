@@ -24,8 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.EOFException
-import java.io.IOException
 import java.util.UUID
 
 const val TAG = "ChatActivity"
@@ -116,14 +114,6 @@ class ChatActivity: AppCompatActivity(), ChatAdapter.ChatAdapterListener {
                                     }
                                 }
 
-                                if (res.stream_type == StreamType.RESPONSE_IDENTIFIER) {
-                                    val responseId = res.response_id
-                                    Log.i(TAG, "Response: responseId  $responseId")
-                                    runOnUiThread {
-                                        chatAdapter.updateMessageResponseId(responseId, msgId)
-                                    }
-                                }
-
                                 if (res.stream_type == StreamType.CONTEXT) {
                                     contextData = res.contexts
                                     runOnUiThread {
@@ -140,30 +130,24 @@ class ChatActivity: AppCompatActivity(), ChatAdapter.ChatAdapterListener {
                                     }
                                 }
 
-                                if (res.stream_type == StreamType.RESPONSE_END) {
+                                if (res.stream_type == StreamType.RESPONSE_IDENTIFIER) {
+                                    val responseId = res.response_id
+                                    Log.i(TAG, "Response: responseId  $responseId")
                                     runOnUiThread {
-                                        chatAdapter.updateMessageEnd(msgId)
+                                        chatAdapter.updateMessageResponseId(responseId, msgId)
                                         chatRecyclerView.scrollToPosition(messages.size - 1)
-                                        Log.i(TAG, "Response: End ")
                                     }
+                                    return@forEach
                                 }
                             }
                         } catch (exp: Exception) {
-                            Log.i(TAG, "Exception: ${exp.localizedMessage}")
-                            var msg = "Error Occurred"
-                            //Ignore IOException as it is expected at the end of stream except EOFException
-                            if (exp is IOException) {
-                                //EOFException due to Network issues, report to user
-                                if (exp is EOFException)
-                                    msg = "Oh no!!! Network error occurred"
-                                else
-                                    return@withContext
-                            }
+                            exp.printStackTrace()
+                            Log.e(TAG, "Exception: ${exp.localizedMessage}")
 
-                            //For any other exception report to user
+                            //For any exception report to user
                             runOnUiThread {
                                 chatAdapter.removeMessage(msgId)
-                                Toast.makeText(this@ChatActivity, msg, Toast.LENGTH_SHORT)
+                                Toast.makeText(this@ChatActivity, "Error: "+ exp.message, Toast.LENGTH_SHORT)
                                     .show()
                             }
                         }
