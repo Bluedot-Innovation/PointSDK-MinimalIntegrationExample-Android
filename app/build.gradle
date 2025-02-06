@@ -12,11 +12,29 @@ android {
         versionCode 2
         versionName "2.0"
     }
+
+
+
+    signingConfigs {
+        debug {
+            storeFile file("android-minApp-key")
+            storePassword "bluedot"
+            keyAlias "minapp"
+            keyPassword "bluedot"
+        }
+        release {
+            storeFile file("android-minApp-key")
+            storePassword "bluedot"
+            keyAlias "minapp"
+            keyPassword "bluedot"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 
@@ -34,7 +52,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.gitlab.bluedotio.android:point_sdk_android:ni~fix-responseId-SNAPSHOT'
+    implementation 'com.gitlab.bluedotio.android:point_sdk_android:dev~17.0.0-SNAPSHOT'
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
