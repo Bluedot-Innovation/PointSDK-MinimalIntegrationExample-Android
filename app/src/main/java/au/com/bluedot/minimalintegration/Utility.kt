@@ -5,7 +5,6 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.StyleSpan
-import android.util.Log
 
 fun parseHtmlStringToMarkdown(htmlString: String): Spanned {
     // Replace <br> with newlines and <b> with markdown bold
@@ -39,10 +38,10 @@ fun applyItalicStyle(spannableStringBuilder: SpannableStringBuilder) {
         val start = spannableStringBuilder.toString().indexOf(italicText)
         val end = start + italicText.length
         if (start - 1 >= 0 && start < spannableStringBuilder.length)
-        spannableStringBuilder.replace(start - 1, start, " ")
+         spannableStringBuilder.replace(start - 1, start, " ")
 
         if (end+1 <= spannableStringBuilder.length)
-        spannableStringBuilder.replace(end, end + 1, " ")
+         spannableStringBuilder.replace(end, end + 1, " ")
 
         val styleSpan = StyleSpan(Typeface.ITALIC)
         spannableStringBuilder.setSpan(styleSpan, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)

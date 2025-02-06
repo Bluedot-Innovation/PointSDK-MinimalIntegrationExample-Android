@@ -10,9 +10,9 @@ import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.ServiceManager;
 import au.com.bluedot.point.net.engine.TempoService;
 
-/*
+/**
  * @author Bluedot Innovation
- * Copyright (c) 2018 Bluedot Innovation. All rights reserved.
+ * Copyright (c) 2025 Bluedot Innovation. All rights reserved.
  */
 public class MainActivity extends Activity implements View.OnClickListener{
 
