@@ -66,13 +66,13 @@ class ChatActivity: AppCompatActivity(), ChatAdapter.ChatAdapterListener {
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
 
         val brainAI = ServiceManager.getInstance(this).brainAI
-        chat = brainAI.createNewChat()
 
         if (brainAI == null) {
             Toast.makeText(this, "BrainAI not initialized", Toast.LENGTH_SHORT).show()
             return
         }
 
+        chat = brainAI.createNewChat()
         if (chat == null) {
             Toast.makeText(this, "Chat not created, ensure rezolveChatApiKey and rezolveChatApiUrl are setup in global config", Toast.LENGTH_SHORT).show()
             return
