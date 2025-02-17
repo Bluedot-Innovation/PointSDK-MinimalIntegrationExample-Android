@@ -8,4 +8,10 @@
   <string name="stop_geo_trigger">Stop Geo-Trigger</string>
   <string name="start_tempo">Start Tempo</string>
   <string name="stop_tempo">Stop Tempo</string>
+    <string name="chat_ai">Brain Chat AI</string>
+    <string name="start_a_new_chat">Start a new conversation</string>
+    <string name="received_message">Received Message</string>
+    <string name="sent_message">Message Sent</string>
+    <string name="like_button">Like button</string>
+    <string name="dislike_button">Dislike button</string>
 </resources>

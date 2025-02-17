@@ -10,11 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
+
 import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.GeoTriggeringService;
 import au.com.bluedot.point.net.engine.InitializationResultListener;
@@ -23,22 +22,18 @@ import au.com.bluedot.point.net.engine.TempoService;
 import au.com.bluedot.point.net.engine.TempoServiceStatusListener;
 import org.jetbrains.annotations.Nullable;
 
-import static android.app.Notification.PRIORITY_MAX;
-
-import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
-/*
+/**
  * @author Bluedot Innovation
- * Copyright (c) 2018 Bluedot Innovation. All rights reserved.
+ * Copyright (c) 2025 Bluedot Innovation. All rights reserved.
  * MainApplication demonstrates the implementation Bluedot Point SDK and related callbacks.
  */
 public class MainApplication extends Application implements TempoServiceStatusListener {
     ServiceManager mServiceManager;
-    private final static String projectId = "<YOUR-PROJECT-ID>";   //ProjectId from Canvas
+    private final static String projectId = "YOUR-PROJECT-ID";   //ProjectId from Canvas
     private final static String destinationId = "<TEMPO-DESTINATION-ID>"; //destinationId to start Tempo
 
     @Override
@@ -127,8 +122,8 @@ public class MainApplication extends Application implements TempoServiceStatusLi
     }
 
     void startTempo(){
-        Map<String,String> eventMetadata = new HashMap<String, String>();
-        eventMetadata.put("hs_orderId", randomString(5));
+        Map<String,String> eventMetadata = new HashMap<>();
+        eventMetadata.put("hs_orderId", randomString());
         eventMetadata.put("hs_Customer Name", "Customer");
         mServiceManager.setCustomEventMetaData(eventMetadata);
         TempoService.builder()
@@ -140,9 +135,9 @@ public class MainApplication extends Application implements TempoServiceStatusLi
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     static SecureRandom rnd = new SecureRandom();
 
-    private String randomString(int len){
-        StringBuilder sb = new StringBuilder(len);
-        for(int i = 0; i < len; i++)
+    private String randomString() {
+        StringBuilder sb = new StringBuilder(5);
+        for (int i = 0; i < 5; i++)
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         return sb.toString();
     }
@@ -159,38 +154,26 @@ public class MainApplication extends Application implements TempoServiceStatusLi
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-        String channelId  = "Bluedot" + getString(R.string.app_name);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelName = "Bluedot Service" + getString(R.string.app_name);
-            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            notificationChannel.enableLights(false);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.enableVibration(false);
-            NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(notificationChannel);
+        String channelId = "Bluedot" + getString(R.string.app_name);
 
-            Notification.Builder notification = new Notification.Builder(getApplicationContext(), channelId)
-                    .setContentTitle(getString(R.string.foreground_notification_title))
-                    .setContentText(getString(R.string.foreground_notification_text))
-                    .setStyle(new Notification.BigTextStyle().bigText(getString(R.string.foreground_notification_text)))
-                    .setOngoing(true)
-                    .setContentIntent(pendingIntent)
-                    .setCategory(Notification.CATEGORY_SERVICE)
-                    .setSmallIcon(R.mipmap.ic_launcher);
+        String channelName = "Bluedot Service" + getString(R.string.app_name);
+        NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+        notificationChannel.enableLights(false);
+        notificationChannel.setLightColor(Color.RED);
+        notificationChannel.enableVibration(false);
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(notificationChannel);
 
-            return notification.build();
-        } else {
+        Notification.Builder notification = new Notification.Builder(getApplicationContext(), channelId)
+                .setContentTitle(getString(R.string.foreground_notification_title))
+                .setContentText(getString(R.string.foreground_notification_text))
+                .setStyle(new Notification.BigTextStyle().bigText(getString(R.string.foreground_notification_text)))
+                .setOngoing(true)
+                .setContentIntent(pendingIntent)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setSmallIcon(R.mipmap.ic_launcher);
 
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext(), channelId)
-                    .setContentTitle(getString(R.string.foreground_notification_title))
-                    .setContentText(getString(R.string.foreground_notification_text))
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.foreground_notification_text)))
-                    .setOngoing(true)
-                    .setContentIntent(pendingIntent)
-                    .setPriority(PRIORITY_MAX)
-                    .setSmallIcon(R.mipmap.ic_launcher);
-            return notification.build();
-        }
+        return notification.build();
     }
 
     @Override public void onTempoResult(@Nullable BDError bdError) {

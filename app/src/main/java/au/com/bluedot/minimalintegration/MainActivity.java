@@ -1,6 +1,7 @@
 package au.com.bluedot.minimalintegration;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,9 +10,9 @@ import au.com.bluedot.point.net.engine.BDError;
 import au.com.bluedot.point.net.engine.ServiceManager;
 import au.com.bluedot.point.net.engine.TempoService;
 
-/*
+/**
  * @author Bluedot Innovation
- * Copyright (c) 2018 Bluedot Innovation. All rights reserved.
+ * Copyright (c) 2025 Bluedot Innovation. All rights reserved.
  */
 public class MainActivity extends Activity implements View.OnClickListener{
 
@@ -63,6 +64,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     text = text + "Success";
                 }
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.bBrainChatAI:
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                this.startActivity(intent);
                 break;
             default:
                 break;
