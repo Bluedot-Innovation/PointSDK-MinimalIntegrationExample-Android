@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import au.com.bluedot.point.ChatAIError
 import au.com.bluedot.point.net.engine.BDStreamingResponseDtoContext
+import au.com.bluedot.point.net.engine.BrainAI
 import au.com.bluedot.point.net.engine.Chat
 import au.com.bluedot.point.net.engine.ServiceManager
 import au.com.bluedot.point.net.engine.StreamType
@@ -65,7 +66,7 @@ class ChatActivity: AppCompatActivity(), ChatAdapter.ChatAdapterListener {
         chatRecyclerView.adapter = chatAdapter
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        val brainAI = ServiceManager.getInstance(this).brainAI
+        val brainAI: BrainAI? = ServiceManager.getInstance(this).brainAI
 
         if (brainAI == null) {
             Toast.makeText(this, "BrainAI not initialized", Toast.LENGTH_SHORT).show()
@@ -77,6 +78,12 @@ class ChatActivity: AppCompatActivity(), ChatAdapter.ChatAdapterListener {
             Toast.makeText(this, "Chat not created, ensure rezolveChatApiKey and rezolveChatApiUrl are setup in global config", Toast.LENGTH_SHORT).show()
             return
         }
+
+        Log.i(TAG, "Chat created with sessionID: ${chat!!.sessionID} and userID: ${chat!!.userID}")
+
+        //Customize userID and language
+        chat!!.userID = "min_app_001"
+        chat!!.language = "English"
 
         sendButton.setOnClickListener {
             val messageText = messageEditText.text.toString().trim()
