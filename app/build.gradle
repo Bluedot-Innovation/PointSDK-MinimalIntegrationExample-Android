@@ -1,21 +1,40 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
 
 
     defaultConfig {
-        applicationId "au.com.bluedot.simpleintegration"
-        minSdk 21
+        applicationId "au.com.bluedot.minimalintegration"
+        minSdk 26
         targetSdk 34
         compileSdk 34
         versionCode 2
         versionName "1.0"
     }
+
+
+
+    signingConfigs {
+        debug {
+            storeFile file("android-minApp-key")
+            storePassword "bluedot"
+            keyAlias "minapp"
+            keyPassword "bluedot"
+        }
+        release {
+            storeFile file("android-minApp-key")
+            storePassword "bluedot"
+            keyAlias "minapp"
+            keyPassword "bluedot"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 
@@ -26,6 +45,9 @@ android {
     }
 
     namespace 'au.com.bluedot.minimalintegration'
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
