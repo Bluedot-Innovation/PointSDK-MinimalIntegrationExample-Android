@@ -23,7 +23,7 @@ android {
             keyPassword "bluedot"
         }
         release {
-            storeFile file("android-minApp-key")
+            storeFile file(System.getenv("KEYSTORE_PATH"))
             storePassword "bluedot"
             keyAlias "minapp"
             keyPassword "bluedot"
