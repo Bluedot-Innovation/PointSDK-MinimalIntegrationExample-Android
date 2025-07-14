@@ -63,7 +63,8 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                     if(bdError != null)
                         text = text + bdError.getReason();
                     else {
-                        text = text + "Success ";
+                        text = text + "Success SDK Version";
+                        text = text + mServiceManager.getSdkVersion();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
