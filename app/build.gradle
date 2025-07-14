@@ -10,7 +10,7 @@ android {
         targetSdk 34
         compileSdk 34
         versionCode 2
-        versionName "1.15.4.2"
+        versionName "1.15.4.1"
     }
 
 
@@ -52,6 +52,6 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.gitlab.bluedotio.android:point_sdk_android:15.4.2'
+    implementation 'com.gitlab.bluedotio.android:point_sdk_android:15.4.1'
     implementation 'androidx.core:core-ktx:1.9.0'
 }
