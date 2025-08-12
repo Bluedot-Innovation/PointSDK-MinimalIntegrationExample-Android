@@ -22,19 +22,19 @@ android {
             keyAlias "minapp"
             keyPassword "bluedot"
         }
-        release {
-            storeFile file(System.getenv("ANDROID_KEYSTORE_PATH"))
-            storePassword "bluedot"
-            keyAlias "minapp"
-            keyPassword "bluedot"
-        }
+//        release {
+//            storeFile file(System.getenv("ANDROID_KEYSTORE_PATH"))
+//            storePassword "bluedot"
+//            keyAlias "minapp"
+//            keyPassword "bluedot"
+//        }
     }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 
