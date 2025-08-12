@@ -38,8 +38,8 @@ import java.util.Random;
  */
 public class MainApplication extends Application implements TempoServiceStatusListener {
     ServiceManager mServiceManager;
-    private final static String projectId = "221dda25-8976-437d-8a4a-d5a5c93fe9ee";   //ProjectId from Canvas
-    private final static String destinationId = "caseycentral"; //destinationId to start Tempo
+    private final static String projectId = "b0e6bbfa-9067-4d53-bc41-a015a3c6f0ef";   //ProjectId from Canvas
+    private final static String destinationId = "001"; //destinationId to start Tempo
 
     @Override
     public void onCreate() {
@@ -72,7 +72,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
                     Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
                     Log.d("MinApp"," Initialized with projectID"+projectId);
                 };
-                mServiceManager.initialize(projectId, "https://globalconfig.dev-bluedot.com/", resultListener);
+                mServiceManager.initialize(projectId, resultListener);
             }
         } else {
             requestPermissions();
