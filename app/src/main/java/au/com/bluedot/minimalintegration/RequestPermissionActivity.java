@@ -21,7 +21,6 @@ public class RequestPermissionActivity extends AppCompatActivity {
 
         String[] permissions = new String[2];
         permissions[0] = Manifest.permission.ACCESS_FINE_LOCATION;
-        permissions[1] = Manifest.permission.POST_NOTIFICATIONS;
 
         //Request permission required for location
         ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
