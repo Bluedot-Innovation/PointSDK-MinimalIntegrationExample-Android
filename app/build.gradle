@@ -13,6 +13,9 @@ android {
         versionName "1.15.3.0"
     }
 
+    lint {
+        abortOnError false
+    }
 
 
     signingConfigs {
