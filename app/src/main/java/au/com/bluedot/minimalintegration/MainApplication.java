@@ -33,8 +33,8 @@ import java.util.Map;
  */
 public class MainApplication extends Application implements TempoServiceStatusListener {
     ServiceManager mServiceManager;
-    private final static String projectId = "YOUR-PROJECT-ID";   //ProjectId from Canvas
-    private final static String destinationId = "<TEMPO-DESTINATION-ID>"; //destinationId to start Tempo
+    private final static String projectId = "20c0d63a-7a06-4ed2-88e4-c275aa722cf5";   //ProjectId from Canvas
+    private final static String destinationId = "eta123"; //destinationId to start Tempo
 
     @Override
     public void onCreate() {
