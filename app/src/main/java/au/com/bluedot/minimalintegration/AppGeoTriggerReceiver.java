@@ -53,7 +53,7 @@ public class AppGeoTriggerReceiver extends GeoTriggeringEventReceiver {
     @Override
     public void onZoneExitEvent(@NotNull GeoTriggerEvent geoTriggerEvent, @NotNull Context context) {
         String exitDetails = "Exited zone" + geoTriggerEvent.getZoneInfo().getName();
-        String dwellT = "Dwell time: " + Objects.requireNonNull(geoTriggerEvent.exitEvent()).getDwellTime()+ " ms";
+        String dwellT = "Dwell time: " + Objects.requireNonNull(geoTriggerEvent.exitEvent()).getDwellTime()+ "ms";
 
         Toast.makeText(context, exitDetails + dwellT,
                                   Toast.LENGTH_LONG).show();
@@ -62,8 +62,8 @@ public class AppGeoTriggerReceiver extends GeoTriggeringEventReceiver {
     @Override
     public void onZoneDwellEvent(@NonNull GeoTriggerEvent geoTriggerEvent, @NonNull Context context) {
         String dwellDetails = "Dwelled in zone " + geoTriggerEvent.getZoneInfo().getName();
-        String dwellT = "Dwell time: " + Objects.requireNonNull(geoTriggerEvent.dwellEvent()).getCalculatedDwellTime()+ " ms";
-        Log.i("MinApp", "Dwell is "+ geoTriggerEvent);
+        String dwellT = "Dwell time: " + Objects.requireNonNull(geoTriggerEvent.dwellEvent()).getCalculatedDwellTime() + " ms";
+        Log.i("MinApp", "Dwell event triggered for zone: " + geoTriggerEvent.getZoneInfo().getName() + ", event: " + geoTriggerEvent);
         Toast.makeText(context, "Dwell: " + dwellDetails + " " + dwellT,
                 Toast.LENGTH_LONG).show();
     }
