@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -51,10 +53,18 @@ public class AppGeoTriggerReceiver extends GeoTriggeringEventReceiver {
     @Override
     public void onZoneExitEvent(@NotNull GeoTriggerEvent geoTriggerEvent, @NotNull Context context) {
         String exitDetails = "Exited zone" + geoTriggerEvent.getZoneInfo().getName();
-        String dwellT = "Dwell time: " + Objects.requireNonNull(geoTriggerEvent.exitEvent()).getDwellTime()+ " minutes";
+        String dwellT = "Dwell time: " + Objects.requireNonNull(geoTriggerEvent.exitEvent()).getDwellTime()+ " ms";
 
         Toast.makeText(context, exitDetails + dwellT,
                                   Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onZoneDwellEvent(@NonNull GeoTriggerEvent geoTriggerEvent, @NonNull Context context) {
+        String dwellDetails = "Dwelled in zone " + geoTriggerEvent.getZoneInfo().getName();
+        String dwellT = "Dwell time: " + Objects.requireNonNull(geoTriggerEvent.dwellEvent()).getCalculatedDwellTime()+ " ms";
+        Log.i("MinApp", "Dwell is "+ geoTriggerEvent);
+        Toast.makeText(context, "Dwell: " + dwellDetails + dwellT,
+                Toast.LENGTH_LONG).show();
+    }
 }
