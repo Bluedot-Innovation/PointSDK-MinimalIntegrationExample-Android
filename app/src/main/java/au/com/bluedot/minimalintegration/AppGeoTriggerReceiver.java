@@ -64,7 +64,7 @@ public class AppGeoTriggerReceiver extends GeoTriggeringEventReceiver {
         String dwellDetails = "Dwelled in zone " + geoTriggerEvent.getZoneInfo().getName();
         String dwellT = "Dwell time: " + Objects.requireNonNull(geoTriggerEvent.dwellEvent()).getCalculatedDwellTime()+ " ms";
         Log.i("MinApp", "Dwell is "+ geoTriggerEvent);
-        Toast.makeText(context, "Dwell: " + dwellDetails + dwellT,
+        Toast.makeText(context, "Dwell: " + dwellDetails + " " + dwellT,
                 Toast.LENGTH_LONG).show();
     }
 }
