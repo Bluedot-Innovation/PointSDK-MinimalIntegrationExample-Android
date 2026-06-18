@@ -64,11 +64,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 }
                 Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                 break;
-
-            case R.id.bBrainChatAI:
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                this.startActivity(intent);
-                break;
             default:
                 break;
         }
