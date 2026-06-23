@@ -15,9 +15,11 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 
 import au.com.bluedot.point.net.engine.BDError;
+import au.com.bluedot.point.net.engine.BDSwitchError;
 import au.com.bluedot.point.net.engine.GeoTriggeringService;
 import au.com.bluedot.point.net.engine.InitializationResultListener;
 import au.com.bluedot.point.net.engine.ServiceManager;
+import au.com.bluedot.point.net.engine.SwitchResultListener;
 import au.com.bluedot.point.net.engine.TempoService;
 import au.com.bluedot.point.net.engine.TempoServiceStatusListener;
 import org.jetbrains.annotations.Nullable;
@@ -33,17 +35,17 @@ import java.util.Map;
  */
 public class MainApplication extends Application implements TempoServiceStatusListener {
     ServiceManager mServiceManager;
-    private final static String projectId = "YOUR-PROJECT-ID";   //ProjectId from Canvas
-    private final static String destinationId = "<TEMPO-DESTINATION-ID>"; //destinationId to start Tempo
+    //private final static String projectId = "20c0d63a-7a06-4ed2-88e4-c275aa722cf5";   //ProjectId from Canvas
+   // private final static String destinationId = "eta123"; //destinationId to start Tempo
 
     @Override
     public void onCreate() {
         super.onCreate();
         // initialize point sdk
-        initPointSDK();
+       // initPointSDK();
     }
 
-    public void initPointSDK() {
+    public void initPointSDK(String projectId) {
 
         boolean locationPermissionGranted =
                 ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
@@ -73,6 +75,30 @@ public class MainApplication extends Application implements TempoServiceStatusLi
         }
     }
 
+    public void switchProject(String projectId) {
+
+        Log.d("MinApp", "Switching project to " + projectId);
+        if (mServiceManager != null) {
+            mServiceManager.switchProject(projectId, new SwitchResultListener() {
+                @Override
+                public void onSwitchResult(@androidx.annotation.Nullable BDSwitchError bdSwitchError) {
+                    String text = "Switch Project ";
+                    if (bdSwitchError != null) {
+                        text = text + bdSwitchError.getReason();
+                        Log.e("Switch", "Failed: " + bdSwitchError.getReason());
+                    } else {
+                        text = text + "Success ";
+                        Log.i("Switch", "Project switch successful");
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
     private void requestPermissions() {
         Intent intent = new Intent(getApplicationContext(), RequestPermissionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -95,18 +121,33 @@ public class MainApplication extends Application implements TempoServiceStatusLi
     }
 
     void startGeoTrigger() {
+        startGeoTrigger(false);
+    }
+
+    void startGeoTrigger(boolean isBackground) {
         Notification notification = createNotification();
+        if (isBackground) {
+            GeoTriggeringService.builder()
+                    .start(this, geoTriggerError -> {
+                        if (geoTriggerError != null) {
+                            Toast.makeText(getApplicationContext(), "Error in starting GeoTrigger" + geoTriggerError.getReason(), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        Toast.makeText(getApplicationContext(), "GeoTrigger started successfully", Toast.LENGTH_LONG).show();
 
-        GeoTriggeringService.builder()
-                .notification(notification)
-                .start(this, geoTriggerError -> {
-                    if (geoTriggerError != null) {
-                        Toast.makeText(getApplicationContext(),"Error in starting GeoTrigger"+geoTriggerError.getReason(),Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    Toast.makeText(getApplicationContext(),"GeoTrigger started successfully",Toast.LENGTH_LONG).show();
+                    });
+        } else {
+            GeoTriggeringService.builder()
+                    .notification(notification)
+                    .start(this, geoTriggerError -> {
+                        if (geoTriggerError != null) {
+                            Toast.makeText(getApplicationContext(), "Error in starting GeoTrigger" + geoTriggerError.getReason(), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        Toast.makeText(getApplicationContext(), "GeoTrigger started successfully", Toast.LENGTH_LONG).show();
 
-                });
+                    });
+        }
     }
 
     void stopGeoTrigger() {
@@ -121,7 +162,7 @@ public class MainApplication extends Application implements TempoServiceStatusLi
         });
     }
 
-    void startTempo(){
+    void startTempo(String destinationId) {
         Map<String,String> eventMetadata = new HashMap<>();
         eventMetadata.put("hs_orderId", randomString());
         eventMetadata.put("hs_Customer Name", "Customer");

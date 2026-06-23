@@ -17,8 +17,18 @@ buildscript {
 allprojects {
     repositories {
         google()
-        maven { url 'https://jitpack.io' }
         mavenCentral()
+        maven {
+            url "https://gitlab.com/api/v4/projects/14682665/packages/maven"
+            credentials(HttpHeaderCredentials) {
+                name "Private-Token"
+                value gitlabMavenToken
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+        maven { url 'https://jitpack.io' }
     }
 }
 
