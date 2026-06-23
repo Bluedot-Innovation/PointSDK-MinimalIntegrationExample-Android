@@ -16,12 +16,6 @@ android {
 
 
     signingConfigs {
-        debug {
-            storeFile file("android-minApp-key")
-            storePassword "bluedot"
-            keyAlias "minapp"
-            keyPassword "bluedot"
-        }
         release {
             storeFile file("android-minApp-key")
             storePassword "bluedot"
